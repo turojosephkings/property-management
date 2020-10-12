@@ -8,8 +8,9 @@ function HouseDirectory(props) {
         return (
             <ListItem 
                 title={item.address}
-                subtitle={item.status}                    
-                leftAvatar={{ source: require('./images/generichouse.jpg') }}
+                subtitle={item.status}     
+                onPress={() => props.onPress(item.id)}               
+                leftAvatar={{ source: require('./images/generichouse.jpg')}}
             />
         )
     }

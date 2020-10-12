@@ -6,6 +6,7 @@ export const HOUSES = [
         sqft: 2304,
         bathrooms: 3,
         bedrooms: 5,
+        owner: 'Kari Katuristika',
         status: 'For Sale'
     },
     {
@@ -15,6 +16,7 @@ export const HOUSES = [
         sqft: 2234,
         bathrooms: 3,
         bedrooms: 2,
+        owner: 'Yahi la parambaska Viktaje',
         status: 'Rented'
     },
     {
@@ -24,6 +26,7 @@ export const HOUSES = [
         sqft: 2394,
         bathrooms: 2,
         bedrooms: 5,
+        owner: 'Maria Silvereta Tacon de Paret',
         status: 'Not Rented'
     },
     {
@@ -33,6 +36,7 @@ export const HOUSES = [
         sqft: 2354,
         bathrooms: 3,
         bedrooms: 5,
+        owner: 'Alejimulgrunistunis Yoclo',
         status: 'Rented'      
     }
 ];
