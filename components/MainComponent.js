@@ -1,34 +1,44 @@
 import React, { Component } from 'react';
 import HouseDirectory from './HouseDirectoryComponent';
 import HouseInfo from './HouseInfoComponent';
-import { View } from 'react-native';
-import { HOUSES } from '../shared/houses';
+import { View, Platform } from 'react-native';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
+
+const HouseDirectoryNavigator = createStackNavigator(
+    {
+        HouseDirectory: { screen: HouseDirectory }, 
+        HouseInfo: { screen: HouseInfo }
+    },
+    {
+        initialRouteName: 'HouseDirectory',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#610B8C'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+            
+        }
+    }
+);
+
+const AppNavigator = createAppContainer(HouseDirectoryNavigator); 
 
 class Main extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            houses: HOUSES,
-            selectedHouse: null
-        };
-    }
-
-    onHouseSelect(houseId) {
-        this.setState({selectedHouse: houseId});
-    }
 
     render() {
         return ( 
-            <View style={{flex: 1}}>
-                <HouseDirectory 
-                    houses={this.state.houses}
-                    onPress={houseId => this.onHouseSelect(houseId)} 
-                />
-                <HouseInfo
-                    house={this.state.houses.filter(house => house.id === this.state.selectedHouse)[0]}
-                />
+            <View 
+                style={{
+                    flex: 2,
+                    paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
+                }}>
+                <AppNavigator />
             </View>
-        )
+        );
     }
 }
 
