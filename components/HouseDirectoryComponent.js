@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import { HOUSES } from '../shared/houses';
+import { View, FlatList, Text } from 'react-native';
+import { ListItem, Tile } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
+
+const mapStateToProps = state => {
+    return {
+        houses: state.houses
+    };
+};
 
 class HouseDirectory extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            houses: HOUSES
-        };
-    }
 
     static navigationOptions = {
         title: 'houseDirectory'
@@ -20,22 +20,39 @@ class HouseDirectory extends Component {
         const { navigate } = this.props.navigation;
         const renderHouseDirectoryItem = ({item}) => {
             return (
-                <ListItem 
+                <Tile
                     title={item.address}
-                    subtitle={item.status}     
+                    caption={item.sqft}
+                    featured  
                     onPress={() => navigate('HouseInfo', { houseId: item.id })}               
-                    leftAvatar={{ source: require('./images/generichouse.jpg')}}
+                    imageSrc={{uri: baseUrl + item.image}}
                 />
+            );
+        };
+        if (this.props.houses.isLoading) {            
+            return(
+                <View>
+                    <Text>
+                        Y ahora que?
+                    </Text>
+                </View>
             )
+        }
+        if (this.props.houses.errMess) {
+            return (
+                <View>
+                    <Text>{this.props.houses.errMess}</Text>
+                </View>
+            );
         }
         return (
             <FlatList 
-                data={this.state.houses}
+                data={this.props.houses.houses}
                 renderItem={renderHouseDirectoryItem}
                 keyExtractor={item => item.id.toString()}
             />
-        )
+        );
     }
 }
 
-export default HouseDirectory;
+export default connect(mapStateToProps)(HouseDirectory);
