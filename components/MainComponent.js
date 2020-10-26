@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import Home from './HomeComponent';
 import HouseDirectory from './HouseDirectoryComponent';
 import HouseInfo from './HouseInfoComponent';
-import { WORK_ORDERS } from "../shared/workorders";
 import WorkOrder from "./WorkOrderComponent";
 import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import { connect } from 'react-redux';
-import { fetchHouses, fetchWorkorders } from '../redux/ActionCreators';
+import { fetchHouses, fetchWorkorders, fetchPaymentorders } from '../redux/ActionCreators';
 import { Icon } from 'react-native-elements';
 
 const mapDispatchToProps = {
     fetchHouses,
-    fetchWorkorders
+    fetchWorkorders,
+    fetchPaymentorders
+    
 };
 
 const HouseDirectoryNavigator = createStackNavigator(
@@ -23,8 +24,8 @@ const HouseDirectoryNavigator = createStackNavigator(
             screen: HouseDirectory,
             navigationOptions: ({navigation}) => ({
                 headerLeft: <Icon
-                    name='list'
-                    type='font-awesome'
+                    name='navicon'
+                    type='evilicon'
                     iconStyle={styles.stackIcon}
                     onPress={() => navigation.toggleDrawer()}
                 />
@@ -48,7 +49,16 @@ const HouseDirectoryNavigator = createStackNavigator(
 
 const WorkOrderNavigator = createStackNavigator(
     {
-        WorkOrder: { screen: WorkOrder }
+        WorkOrder: { screen: WorkOrder,
+            navigationOptions: ({navigation}) => ({
+                headerLeft: <Icon
+                name='tag'
+                type='evilicon'
+                iconStyle={styles.stackIcon}
+                onPress={() => navigation.toggleDrawer()}
+                />
+            }) 
+        }
     },
     {
         defaultNavigationOptions: {
@@ -99,6 +109,7 @@ class Main extends Component {
     componentDidMount() {
         this.props.fetchHouses();
         this.props.fetchWorkorders();
+        this.props.fetchPaymentorders();
     }
 
     render() {
@@ -119,7 +130,7 @@ const styles = StyleSheet.create({
     stackIcon: {
         marginLeft: 10,
         color: '#fff',
-        fontSize: 24
+        fontSize: 35
     }
 })
 

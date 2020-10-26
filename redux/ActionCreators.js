@@ -75,3 +75,41 @@ export const addWorkorders = workorders => ({
     type: ActionTypes.ADD_WORKORDERS,
     payload: workorders
 });
+
+
+export const fetchPaymentorders = () => dispatch => {
+
+    dispatch(paymentordersLoading());
+
+    return fetch(baseUrl + 'paymentorders')
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                const errMess = new Error(error.message);
+                throw errMess;
+            })
+        .then(response => response.json())
+        .then(paymentorders => dispatch(addPaymentorders(paymentorders)))
+        .catch(error => dispatch(paymentordersFailed(error.message)));
+};
+
+export const paymentordersLoading = () => ({
+    type: ActionTypes.PAYMENTORDERS_LOADING
+});
+
+export const paymentordersFailed = errMess => ({
+    type: ActionTypes.PAYMENTORDERS_FAILED,
+    payload: errMess
+});
+
+export const addPaymentorders = paymentorders => ({
+    type: ActionTypes.ADD_PAYMENTORDERS,
+    payload: paymentorders
+});
