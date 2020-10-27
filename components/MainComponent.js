@@ -76,24 +76,40 @@ const WorkOrderNavigator = createStackNavigator(
 
 const HomeNavigator = createStackNavigator(
     {
-        Home: { screen: Home } 
+        Home: { screen: Home },
     },
     {
-        defaultNavigationOptions: {
+        defaultNavigationOptions: ({navigation}) => ({
             headerStyle: {
-                backgroundColor: '#610B8C'
+                backgroundColor: '#5637DD'
             },
             headerTintColor: '#fff',
-            headerTitleStyle: {
+            headerTitleStyle:{
                 color: '#fff'
-            }
-        }
-    }    
-)
+            },
+            headerLeft: <Icon
+                name='eye'
+                type='evilicon'
+                iconStyle={styles.stackIcon}
+                onPress={() => navigation.toggleDrawer()}
+            />
+        })
+    } 
+);
 
 const MainNavigator = createDrawerNavigator(
     {
-        Home: { screen: HomeNavigator},
+        Overview: { screen: HomeNavigator,
+                navigationOptions: {
+                    drawerIcon: ({tintColor}) => (
+                        <Icon
+                        name='eye'
+                        type='evilicon'
+                            size={25}
+                            color={tintColor}
+                        />
+                    )
+                }},
         HouseDirectory: { screen: HouseDirectoryNavigator },
         WorkOrder: { screen: WorkOrderNavigator }
     },
