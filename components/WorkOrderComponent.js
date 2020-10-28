@@ -1,62 +1,68 @@
 import React, { Component } from 'react';
-import { Card, Button, ListItem } from 'react-native-elements';
-import { View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { HOUSES } from '../shared/houses';
-import { WORK_ORDERS } from "../shared/workorders";
+import { Text, View, StyleSheet, FlatList } from 'react-native';
+import { Card, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
+import { ScrollView } from 'react-native-gesture-handler';
 
+const mapStateToProps = state => {
+    return {
+        houses: state.houses,
+        workorders: state.workorders
+    };
+};
+
+function RenderWorkorders({workorders}) {
+
+    const renderWorkorderItem = ({item}) => {
+
+        let wko = [];
+
+        if (!(item.completed)) {
+            wko = [...wko, {item}]
+            if (wko.length !== 0) {
+                return (
+                    <View style={{margin: 10}}>                                           
+                        <Text style={{fontSize: 16, fontWeight: 'bold' }}>{item.description}</Text>
+                        <Text style={{fontSize: 14}}>{item.address}</Text>           
+                    </View>
+                )
+            } 
+        }
+    }
+    
+    return (
+        <Card title='Active Workorders'>
+
+            <FlatList
+                data={workorders}
+                renderItem={renderWorkorderItem}
+                keyExtractor={item => item.id}
+            />
+            <Button 
+                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
+                    title='View Work Orders' 
+                />
+        </Card>
+    )
+}
 
 
 class WorkOrder extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state ={
-            houses: HOUSES,
-            workorders : WORK_ORDERS
-        }
-    }
+    
   
     render() {
-        const renderOrders = ({item}) => {
+
+        const workorders = this.props.workorders.workorders.filter(workorder => !(workorder.completed));
+
         return (
-            <ListItem                
-                title={`${item.orderType} - ${item.description}` }                
-                subtitle={`${item.address}`}             
-            />
+            <View>
+                <RenderWorkorders workorders={workorders} />
+            </View>
         );
-    };
-
-    return (
-        <View>
-            <Card>
-            <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='Pa' 
-                />
-                <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='Home Overview' 
-                />
-                <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='View Work Orders' 
-                />
-                <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='View Appliances' 
-                />
-            </Card>
-
-            <FlatList 
-                data={this.state.workorders}
-                renderItem={renderOrders}
-                keyExtractor={item => item.orderId.toString()}
-                />
-        </View>
-    );
-}
+    }
 
 }
 
-export default WorkOrder;
+export default connect(mapStateToProps)(WorkOrder);
