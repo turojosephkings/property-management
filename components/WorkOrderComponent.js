@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, FlatList } from 'react-native';
-import { Card, Button } from 'react-native-elements';
+import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput } from 'react-native';
+import { Card, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const mapStateToProps = state => {
     return {
@@ -40,29 +41,59 @@ function RenderWorkorders({workorders}) {
                 keyExtractor={item => item.id}
             />
             <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='View Work Orders' 
-                />
+                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
+                title='View Work Orders' 
+            />
+            <View>
+
+            </View>
         </Card>
     )
 }
 
 
+
 class WorkOrder extends Component {
 
-    
-  
+
     render() {
 
+        const { navigate } = this.props.navigation;
         const workorders = this.props.workorders.workorders.filter(workorder => !(workorder.completed));
 
         return (
-            <View>
-                <RenderWorkorders workorders={workorders} />
-            </View>
+            <ScrollView>
+                <RenderWorkorders 
+                    workorders={workorders} 
+                />
+                <View>
+                <Button
+                    title="New Order"
+                    onPress={() => navigate('NewOrder')}
+                />
+                </View>
+
+
+                
+
+            </ScrollView>
         );
     }
 
 }
+
+const styles = StyleSheet.create({
+    cardRow: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        margin: 20
+    },
+    modal: {
+        justifyContent:'center',
+        margin: 20
+    }
+})
 
 export default connect(mapStateToProps)(WorkOrder);

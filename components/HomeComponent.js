@@ -17,6 +17,7 @@ const mapStateToProps = state => {
 
 function RenderWorkorders({workorders}) {
 
+    
     const renderWorkorderItem = ({item}) => {
 
         let wko = [];
@@ -94,6 +95,7 @@ class Home extends Component {
 
     render() {
 
+        const { navigate } = this.props.navigation;
         const workorders = this.props.workorders.workorders.filter(workorder => !(workorder.completed));
         const paymentorders = this.props.paymentorders.paymentorders.filter(paymentorder => !(paymentorder.completed));
 
@@ -101,6 +103,10 @@ class Home extends Component {
             <ScrollView>
                 <RenderWorkorders workorders={workorders} />
                 <RenderPaymentorders paymentorders={paymentorders} />
+                <Button 
+                    title='View Workorders'
+                    onPress={() => navigate('WorkOrder')}
+                />
             </ScrollView>
         )
     }

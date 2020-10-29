@@ -3,6 +3,7 @@ import Home from './HomeComponent';
 import HouseDirectory from './HouseDirectoryComponent';
 import HouseInfo from './HouseInfoComponent';
 import WorkOrder from "./WorkOrderComponent";
+import NewOrder from './NewOrderComponent';
 import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
@@ -29,8 +30,10 @@ const HouseDirectoryNavigator = createStackNavigator(
                     iconStyle={styles.stackIcon}
                     onPress={() => navigation.toggleDrawer()}
                 />
-            }) }, 
-        HouseInfo: { screen: HouseInfo }
+            }) 
+        }, 
+        HouseInfo: 
+        { screen: HouseInfo }
     },
     {
         initialRouteName: 'HouseDirectory',
@@ -58,7 +61,16 @@ const WorkOrderNavigator = createStackNavigator(
                 onPress={() => navigation.toggleDrawer()}
                 />
             }) 
-        }
+        },
+        NewOrder: { screen: NewOrder,
+            navigationOptions: ({navigation}) => ({
+                headerLeft: <Icon
+                    name='pencil'
+                    type='evilicon'
+                    iconStyle={styles.stackIcon}
+                />
+            })  }
+
     },
     {
         defaultNavigationOptions: {
@@ -76,7 +88,7 @@ const WorkOrderNavigator = createStackNavigator(
 
 const HomeNavigator = createStackNavigator(
     {
-        Home: { screen: Home },
+        Home: { screen: Home }
     },
     {
         defaultNavigationOptions: ({navigation}) => ({

@@ -73,10 +73,6 @@ function RenderWorkorders({workorders}) {
                 renderItem={renderWorkorderItem}
                 keyExtractor={item => item.id}
             />
-            <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='View Work Orders' 
-                />
         </Card>
     )
 }
@@ -100,6 +96,11 @@ class HouseInfo extends Component {
             <ScrollView>
                 <RenderHouse house={house} />
                 <RenderWorkorders workorders={workorders} />
+                <Button 
+                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
+                    title='View Work Orders' 
+                    //onPress={() => navigate('WorkOrder', { houseId: item.id })}
+                />
             </ScrollView>
         )
     }
