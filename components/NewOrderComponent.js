@@ -14,7 +14,7 @@ const mapStateToProps = state => {
     };
 };
 
-let id, add;
+
 
 function RenderHouses({houses}) {
 
@@ -27,10 +27,9 @@ function RenderHouses({houses}) {
                 title={item.address}
                 subtitle={item.owner}
                 featured  
-                onPress={() =>
-                    this.setState({houseId: item.houseId,
-                                    address: item.address 
-                               })
+                onPress={() => 
+                    //this.props.chooseHouse(item.id, item.address)
+                    console.log('aqui')//(JSON.stringify(this.props.houseId))
                 }
             />
         );
@@ -54,6 +53,10 @@ function RenderHouses({houses}) {
 
 
 class NewOrder extends Component {
+
+    static navigationOptions = {
+        title: 'Create a New Workorder'
+    };
 
     constructor(props) {
         super(props)
@@ -92,6 +95,17 @@ class NewOrder extends Component {
         this.setState({showModal: !this.setState.showModal});
     }
 
+    chooseHouse(hId, add) {
+        this.setState({
+            houseId: hId,
+            address: add
+        })
+    }
+
+ 
+
+    
+
 
     render() {
 
@@ -102,13 +116,42 @@ class NewOrder extends Component {
                 <View>
                     <RenderHouses houses={houses}/>
                 </View>
+                <View>
+                    <Input
+                        placeholder='Description'
+                        leftIcon={{type: 'font-awesome', name: 'commenting'}}
+                        onChangeText={description => this.setState({description})}
+                        value={this.state.description}
+                        containerStyle={styles.formInput}
+                        leftIconContainerStyle={styles.formIcon}
+                    />
+                </View>
+
             </ScrollView>
         )
     }
 
 }
 
-
+const styles = StyleSheet.create({
+    container: {
+        justifyContent: 'center',
+        margin: 20
+    },
+    formIcon: {
+        marginRight: 10
+    },
+    formInput: {
+        padding: 10
+    },
+    formCheckbox: {
+        margin: 10,
+        backgroundColor: null
+    },
+    formButton: {
+        margin: 40
+    }
+})
 
 
 

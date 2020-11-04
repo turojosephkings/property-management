@@ -4,6 +4,7 @@ import HouseDirectory from './HouseDirectoryComponent';
 import HouseInfo from './HouseInfoComponent';
 import WorkOrder from "./WorkOrderComponent";
 import NewOrder from './NewOrderComponent';
+import Login from './LoginComponent';
 import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
@@ -55,21 +56,23 @@ const WorkOrderNavigator = createStackNavigator(
         WorkOrder: { screen: WorkOrder,
             navigationOptions: ({navigation}) => ({
                 headerLeft: <Icon
-                name='tag'
-                type='evilicon'
-                iconStyle={styles.stackIcon}
-                onPress={() => navigation.toggleDrawer()}
-                />
+                                name='wrench'
+                                type='font-awesome'
+                                iconStyle={styles.stackIcon}
+                                onPress={() => navigation.toggleDrawer()}
+                            />
             }) 
         },
         NewOrder: { screen: NewOrder,
             navigationOptions: ({navigation}) => ({
                 headerLeft: <Icon
-                    name='pencil'
-                    type='evilicon'
-                    iconStyle={styles.stackIcon}
-                />
-            })  }
+                            name='file-text'
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                            onPress={() => navigation.toggleDrawer()}                            
+                        />
+            })  
+        }
 
     },
     {
@@ -100,8 +103,31 @@ const HomeNavigator = createStackNavigator(
                 color: '#fff'
             },
             headerLeft: <Icon
-                name='eye'
-                type='evilicon'
+                name='dashboard'
+                type='font-awesome'
+                iconStyle={styles.stackIcon}
+                onPress={() => navigation.toggleDrawer()}
+            />
+        })
+    } 
+);
+
+const LoginNavigator = createStackNavigator(
+    {
+        Login: { screen: Login }
+    },
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle:{
+                color: '#fff'
+            },
+            headerLeft: <Icon
+                name='sign-in'
+                type='font-awesome'
                 iconStyle={styles.stackIcon}
                 onPress={() => navigation.toggleDrawer()}
             />
@@ -111,19 +137,53 @@ const HomeNavigator = createStackNavigator(
 
 const MainNavigator = createDrawerNavigator(
     {
+        Login: { screen: LoginNavigator,
+            navigationOptions: {
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                    name='sign-in'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },
         Overview: { screen: HomeNavigator,
-                navigationOptions: {
-                    drawerIcon: ({tintColor}) => (
-                        <Icon
-                        name='eye'
-                        type='evilicon'
-                            size={25}
-                            color={tintColor}
-                        />
-                    )
-                }},
-        HouseDirectory: { screen: HouseDirectoryNavigator },
-        WorkOrder: { screen: WorkOrderNavigator }
+            navigationOptions: {
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                    name='dashboard'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },
+        HouseDirectory: { screen: HouseDirectoryNavigator, 
+            navigationOptions: {
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                    name='list-ul'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },
+        WorkOrder: { screen: WorkOrderNavigator, 
+            navigationOptions: {
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                    name='wrench'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            } }
     },
     {
         drawerBackgroundColor: '#CEC8FF'
@@ -158,7 +218,7 @@ const styles = StyleSheet.create({
     stackIcon: {
         marginLeft: 10,
         color: '#fff',
-        fontSize: 35
+        fontSize: 34
     }
 })
 

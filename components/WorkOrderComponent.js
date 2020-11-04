@@ -55,6 +55,10 @@ function RenderWorkorders({workorders}) {
 
 class WorkOrder extends Component {
 
+    static navigationOptions = {
+        title: 'Workorders'
+    };
+
 
     render() {
 

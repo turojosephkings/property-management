@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, FlatList } from 'react-native';
+import { Text, View, StyleSheet, FlatList, Animated } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -35,6 +35,7 @@ function RenderWorkorders({workorders}) {
         }
     }
     
+
     return (
         <Card title='Active Workorders'>
 
@@ -43,10 +44,6 @@ function RenderWorkorders({workorders}) {
                 renderItem={renderWorkorderItem}
                 keyExtractor={item => item.id}
             />
-            <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='View Work Orders' 
-                />
         </Card>
     )
 }
@@ -78,10 +75,6 @@ function RenderPaymentorders({paymentorders}) {
                 renderItem={renderPaymentorderItem}
                 keyExtractor={item => item.id}
             />
-            <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='View Payments' 
-                />
         </Card>
     )
 }
@@ -101,16 +94,41 @@ class Home extends Component {
 
         return (
             <ScrollView>
-                <RenderWorkorders workorders={workorders} />
-                <RenderPaymentorders paymentorders={paymentorders} />
-                <Button 
-                    title='View Workorders'
-                    onPress={() => navigate('WorkOrder')}
-                />
+                
+                
+                <View>
+                    <RenderWorkorders workorders={workorders} />
+                    <Button 
+                        title='View Workorders'
+                        onPress={() => navigate('WorkOrder')}
+                        buttonStyle={styles.Buttons}
+                    />
+                    <Button 
+                        title='Create New Workorder'
+                        onPress={() => navigate('NewOrder')}
+                        buttonStyle={styles.Buttons}
+                    />
+                </View>
+                <View>
+                    <RenderPaymentorders paymentorders={paymentorders} />
+                    <Button 
+                        title='View Payment Orders'
+                        //onPress={() => navigate('Payment')}
+                        buttonStyle={styles.Buttons}
+                    />
+                </View>
             </ScrollView>
         )
     }
 }
+
+const styles = StyleSheet.create({
+
+    Buttons: {
+        margin: 40
+    }
+})
+
 
 
 export default connect(mapStateToProps)(Home)

@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 class HouseDirectory extends Component {
 
     static navigationOptions = {
-        title: 'houseDirectory'
+        title: 'House Directory'
     };
 
     render() {
