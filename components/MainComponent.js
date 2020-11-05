@@ -12,6 +12,8 @@ import { createAppContainer } from 'react-navigation';
 import { connect } from 'react-redux';
 import { fetchHouses, fetchWorkorders, fetchPaymentorders } from '../redux/ActionCreators';
 import { Icon } from 'react-native-elements';
+import NewProperty from './NewProperty';
+import NewOrderComponent from './NewOrderComponent';
 
 const mapDispatchToProps = {
     fetchHouses,
@@ -112,6 +114,29 @@ const HomeNavigator = createStackNavigator(
     } 
 );
 
+const NewPropertyNavigator = createStackNavigator(
+    {
+        NewProperty: { screen: NewProperty }
+    },
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle:{
+                color: '#fff'
+            },
+            headerLeft: <Icon
+                name='plus-circle'
+                type='font-awesome'
+                iconStyle={styles.stackIcon}
+                onPress={() => navigation.toggleDrawer()}
+            />
+        })
+    } 
+);
+
 const LoginNavigator = createStackNavigator(
     {
         Login: { screen: Login }
@@ -183,7 +208,20 @@ const MainNavigator = createDrawerNavigator(
                         color={tintColor}
                     />
                 )
-            } }
+            } 
+        },
+        NewProperty: { screen: NewPropertyNavigator, 
+            navigationOptions: {
+                drawerIcon: ({tintColor}) => (
+                    <Icon
+                    name='plus-circle'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            } 
+        }
     },
     {
         drawerBackgroundColor: '#CEC8FF'
