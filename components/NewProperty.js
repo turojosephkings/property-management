@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
 import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker} from 'react-native';
+import { postHouse } from '../redux/ActionCreators';
 import { baseUrl } from '../shared/baseUrl';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -12,6 +13,10 @@ const mapStateToProps = state => {
         houses: state.houses
     };
 };
+
+const mapDispatchToProps = {
+    postHouse: (address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => (postHouse(address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes)),
+}
 
 class NewProperty extends Component {
 
@@ -74,7 +79,11 @@ class NewProperty extends Component {
 
     toggleMiscellaneousModal() {
         this.setState({showMiscellaneousModal: !this.state.showMiscellaneousModal});
-    }        
+    }   
+    
+    handleNewHouse() {
+        this.props.postHouse(this.state.address, this.state.imageUrl, this.state.sqft, this.state.hoa, this.state.electricprovider, this.state.waterprovider, this.state.fuelprovider, this.state.bedrooms, this.state.bathrooms, this.state.halfbathroom, this.state.waterheater, this.state.airconditioner, this.state.furnace, this.state.washer, this.state.dryer, this.state.dishwasher, this.state.stove, this.state.rangehood, this.state.microwaverangehood, this.state.refrigerator, this.state.garagedooropener, this.state.sewertype, this.state.petfriendly, this.state.pool, this.state.notes);
+    }    
 
     getImageFromCamera = async () => {
         const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
@@ -158,7 +167,7 @@ class NewProperty extends Component {
                       <View style={{margin: 10}} >
                         <Button 
                             title='Create Property!'
-                            onPress={() => {console.log(JSON.stringify(this.state))}}
+                            onPress={() => {this.handleNewHouse(), console.log(JSON.stringify(this.state))}}
                             buttonStyle={styles.Buttons}
                         /> 
                       </View>                
@@ -481,4 +490,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default connect(mapStateToProps)(NewProperty)
+export default connect(mapStateToProps, mapDispatchToProps)(NewProperty)

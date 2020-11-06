@@ -1,30 +1,55 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
-export const postHouse = (campsiteId, rating, author, text) => dispatch =>  {
+export const postHouse = (address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => dispatch =>  {
 
-    const newComment = {
-        campsiteId,
-        rating,
-        author,
-        text
+    const newHouse = {
+        address,
+        imageUrl,
+        sqft,
+        hoa,
+        electricprovider,
+        waterprovider,
+        fuelprovider,
+        bedrooms,
+        bathrooms,
+        halfbathroom,
+        appliances: {
+            waterheater,
+            airconditioner,
+            furnace,
+            washer,
+            dryer,
+            dishwasher,
+            stove,
+            rangehood,
+            microwaverangehood,
+            refrigerator,
+            garagedooropener
+        },
+        sewertype,
+        petfriendly,
+        pool,
+        notes
     };
 
-    const d = new Date();
-    newComment.date = d.toISOString();
-
     setTimeout(() => {
-        dispatch(addComment(newComment));
+        dispatch(addHouse(newHouse));
     }, 2000);
 
-    fetch(baseUrl + "comments", {
+    fetch(baseUrl + "houses", {
         method: "POST",
-        body: JSON.stringify(newComment),
+        body: JSON.stringify(newHouse),
         headers: {
             "Content-Type" : "application/json",
         },
     })
 }
+
+export const addHouse  = house => ({
+    type: ActionTypes.ADD_HOUSE,
+    payload: house
+});
 
 export const fetchHouses = () => dispatch => {
 
