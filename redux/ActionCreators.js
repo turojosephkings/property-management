@@ -1,6 +1,31 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
+export const postHouse = (campsiteId, rating, author, text) => dispatch =>  {
+
+    const newComment = {
+        campsiteId,
+        rating,
+        author,
+        text
+    };
+
+    const d = new Date();
+    newComment.date = d.toISOString();
+
+    setTimeout(() => {
+        dispatch(addComment(newComment));
+    }, 2000);
+
+    fetch(baseUrl + "comments", {
+        method: "POST",
+        body: JSON.stringify(newComment),
+        headers: {
+            "Content-Type" : "application/json",
+        },
+    })
+}
+
 export const fetchHouses = () => dispatch => {
 
     dispatch(housesLoading());

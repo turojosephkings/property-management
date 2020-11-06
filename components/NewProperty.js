@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
 import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker} from 'react-native';
 import { baseUrl } from '../shared/baseUrl';
@@ -9,12 +9,12 @@ import { SafeAreaView } from 'react-navigation';
 
 const mapStateToProps = state => {
     return {
-        houses: state.houses,
-        workorders: state.workorders
+        houses: state.houses
     };
 };
 
 class NewProperty extends Component {
+
 
     constructor(props) {
         super(props);
@@ -93,8 +93,8 @@ class NewProperty extends Component {
     }
 
     render() {
-
-        const { modalVisible } = this.state.showRoomsModal;        
+   
+        const id = this.props.houses.houses.length;
 
         return(
             <ScrollView>
@@ -155,7 +155,13 @@ class NewProperty extends Component {
                         /> 
                       </View>                                                                                 
     
-               
+                      <View style={{margin: 10}} >
+                        <Button 
+                            title='Create Property!'
+                            onPress={() => {console.log(JSON.stringify(this.state))}}
+                            buttonStyle={styles.Buttons}
+                        /> 
+                      </View>                
                 </View>
 
                 <Modal
@@ -216,7 +222,7 @@ class NewProperty extends Component {
                             <View>
                                 <Button 
                                     title='Confirm'
-                                    onPress={() => {console.log(JSON.stringify(this.state)),this.toggleRoomsModal()}}
+                                    onPress={() => {this.toggleRoomsModal()}}
                                 />
                             </View> 
                         </View>
@@ -320,7 +326,7 @@ class NewProperty extends Component {
                             <View>
                                 <Button 
                                     title='Confirm'
-                                    onPress={() => {console.log(JSON.stringify(this.state)),this.toggleApplianceModal()}}
+                                    onPress={() => {this.toggleApplianceModal()}}
                                 />
                             </View> 
                         </View>
@@ -365,7 +371,7 @@ class NewProperty extends Component {
                         <View>
                             <Button 
                                 title='Confirm'
-                                onPress={() => {console.log(JSON.stringify(this.state)),this.toggleMiscellaneousModal()}}
+                                onPress={() => {this.toggleMiscellaneousModal()}}
                             />
                         </View>                          
                     </SafeAreaView>
@@ -411,7 +417,7 @@ class NewProperty extends Component {
                         <View>
                             <Button 
                                 title='Confirm'
-                                onPress={() => {console.log(JSON.stringify(this.state)),this.toggleUtilitiesModal()}}
+                                onPress={() => {this.toggleUtilitiesModal()}}
                             />
                         </View>                         
                     </SafeAreaView>
@@ -475,4 +481,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default (NewProperty)
+export default connect(mapStateToProps)(NewProperty)
