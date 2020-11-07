@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { SafeAreaView } from 'react-navigation';
 import { color } from 'react-native-reanimated';
+import { fetchHouses } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
@@ -18,6 +19,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
+    fetchHouses,
     postHouse: (address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => (postHouse(address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes)),
 }
 
@@ -88,10 +90,52 @@ class NewProperty extends Component {
     toggleConfirmationModal() {
         this.setState({showConfirmationModal: !this.state.showConfirmationModal});
     } 
+
+    refreshHouses() {
+        this.props.fetchHouses();
+    }
     
     handleNewHouse() {
         this.props.postHouse(this.state.address, this.state.imageUrl, this.state.sqft, this.state.hoa, this.state.electricprovider, this.state.waterprovider, this.state.fuelprovider, this.state.bedrooms, this.state.bathrooms, this.state.halfbathroom, this.state.waterheater, this.state.airconditioner, this.state.furnace, this.state.washer, this.state.dryer, this.state.dishwasher, this.state.stove, this.state.rangehood, this.state.microwaverangehood, this.state.refrigerator, this.state.garagedooropener, this.state.sewertype, this.state.petfriendly, this.state.pool, this.state.notes);
-    }    
+    }   
+    
+    resetForm() {
+        this.setState({
+            showRoomsModal: false,
+            showApplianceModal: false,
+            showUtilitiesModal: false,
+            showMiscellaneousModal: false,
+            showConfirmationModal: false,
+            id: '',
+            address: '',
+            imageUrl: baseUrl + './images/iconHouse.jpg',
+            sqft: '',
+            hoa: false,
+            electricprovider: '',
+            waterprovider: '',
+            fuelprovider: '',
+            bedrooms: '1',
+            bathrooms: '1',
+            halfbathroom: false,
+            appliances: {
+                waterheater: false,
+                airconditioner: false,
+                furnace: false,
+                washer: false,
+                dryer: false,
+                dishwasher: false,
+                stove: false,
+                rangehood: false,
+                microwaverangehood: false,
+                refrigerator: false,
+                garagedooropener: false
+            },
+            sewertype: '',
+            petfriendly: false,
+            pool: false,
+            notes: ''
+        });
+    }
 
     getImageFromCamera = async () => {
         const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
@@ -513,7 +557,7 @@ class NewProperty extends Component {
                                 <Button 
                                     title='Confirm'
                                     buttonStyle={{margin: 10}}
-                                    onPress={() => {this.handleNewHouse(), this.toggleConfirmationModal(), console.log(JSON.stringify(this.state))}}
+                                    onPress={() => {this.handleNewHouse(), this.toggleConfirmationModal(), this.resetForm(), this.refreshHouses(), console.log(JSON.stringify(this.state))}}
                                 />
                             </View>  
                         </ScrollView>                        
