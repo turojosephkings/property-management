@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
-import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker} from 'react-native';
+import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker, Card } from 'react-native';
 import { postHouse } from '../redux/ActionCreators';
 import { baseUrl } from '../shared/baseUrl';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { SafeAreaView } from 'react-navigation';
+import { color } from 'react-native-reanimated';
 
 const mapStateToProps = state => {
     return {
-        houses: state.houses
+        houses: state.houses,
+        tenants: state.tenants,
+        owners: state.owners
     };
 };
 
@@ -29,6 +32,7 @@ class NewProperty extends Component {
             showApplianceModal: false,
             showUtilitiesModal: false,
             showMiscellaneousModal: false,
+            showConfirmationModal: false,
             id: '',
             address: '',
             imageUrl: baseUrl + './images/iconHouse.jpg',
@@ -37,8 +41,8 @@ class NewProperty extends Component {
             electricprovider: '',
             waterprovider: '',
             fuelprovider: '',
-            bedrooms: '',
-            bathrooms: '',
+            bedrooms: '1',
+            bathrooms: '1',
             halfbathroom: false,
             appliances: {
                 waterheater: false,
@@ -79,7 +83,11 @@ class NewProperty extends Component {
 
     toggleMiscellaneousModal() {
         this.setState({showMiscellaneousModal: !this.state.showMiscellaneousModal});
-    }   
+    }
+    
+    toggleConfirmationModal() {
+        this.setState({showConfirmationModal: !this.state.showConfirmationModal});
+    } 
     
     handleNewHouse() {
         this.props.postHouse(this.state.address, this.state.imageUrl, this.state.sqft, this.state.hoa, this.state.electricprovider, this.state.waterprovider, this.state.fuelprovider, this.state.bedrooms, this.state.bathrooms, this.state.halfbathroom, this.state.waterheater, this.state.airconditioner, this.state.furnace, this.state.washer, this.state.dryer, this.state.dishwasher, this.state.stove, this.state.rangehood, this.state.microwaverangehood, this.state.refrigerator, this.state.garagedooropener, this.state.sewertype, this.state.petfriendly, this.state.pool, this.state.notes);
@@ -126,18 +134,10 @@ class NewProperty extends Component {
                         value={this.state.address}
                         containerStyle={styles.formInput}
                         leftIconContainerStyle={styles.formIcon}
-                    /> 
-                    <Input
-                        placeholder='sqft'
-                        leftIcon={{type: 'font-awesome', name: 'map-signs'}}
-                        onChangeText={sqft => this.setState({sqft})}
-                        value={this.state.sqft}
-                        containerStyle={styles.formInput}
-                        leftIconContainerStyle={styles.formIcon}
-                    />                                                           
+                    />                                                          
                     <View style={{margin: 10}} >
                         <Button 
-                            title='Rooms'
+                            title='Spaces'
                             onPress={() => this.toggleRoomsModal()}
                             buttonStyle={styles.Buttons}
                         />  
@@ -167,10 +167,13 @@ class NewProperty extends Component {
                       <View style={{margin: 10}} >
                         <Button 
                             title='Create Property!'
-                            onPress={() => {this.handleNewHouse(), console.log(JSON.stringify(this.state))}}
+                            onPress={() => {this.toggleConfirmationModal()}}
                             buttonStyle={styles.Buttons}
                         /> 
-                      </View>                
+                      </View>     
+                      <View>
+                    
+                        </View>           
                 </View>
 
                 <Modal
@@ -180,26 +183,35 @@ class NewProperty extends Component {
                     onRequestClose={() => this.toggleRoomsModal()}
                 >
                     <SafeAreaView>
-
                     <View style={styles.modal}>
-                    <Text style={styles.modalTitle}>How Many Bedrooms?</Text>                                             
-                    <Picker
-                        
-                        selectedValue={this.state.bedrooms}
-                        onValueChange={itemValue => this.setState({bedrooms: itemValue})}
-                    >
-                        <Picker.Item label='1' value='1' />
-                        <Picker.Item label='2' value='2' />
-                        <Picker.Item label='3' value='3' />
-                        <Picker.Item label='4' value='4' />
-                        <Picker.Item label='5' value='5' />
-                        <Picker.Item label='6' value='6' />
-                        <Picker.Item label='7' value='7' />
-                        <Picker.Item label='8' value='8' />
-                        <Picker.Item label='9' value='9' />
-                        <Picker.Item label='10' value='10' />
-                    </Picker>  
-                    <Text style={styles.modalTitle}>How Many Bathrooms</Text>
+                    <Text style={styles.modalTitle}>House Spaces</Text> 
+                    <Input
+                        placeholder='sqft'
+                        leftIcon={{type: 'font-awesome', name: 'map-signs'}}
+                        onChangeText={sqft => this.setState({sqft})}
+                        value={this.state.sqft}
+                        containerStyle={styles.formInput}
+                        leftIconContainerStyle={styles.formIcon}
+                    />  
+                    
+                        <Text style={styles.modalText}>How Many Bedrooms?</Text>   
+                                                                
+                        <Picker  
+                            selectedValue={this.state.bedrooms}
+                            onValueChange={itemValue => this.setState({bedrooms: itemValue})}
+                        >
+                            <Picker.Item label='1' value='1' />
+                            <Picker.Item label='2' value='2' />
+                            <Picker.Item label='3' value='3' />
+                            <Picker.Item label='4' value='4' />
+                            <Picker.Item label='5' value='5' />
+                            <Picker.Item label='6' value='6' />
+                            <Picker.Item label='7' value='7' />
+                            <Picker.Item label='8' value='8' />
+                            <Picker.Item label='9' value='9' />
+                            <Picker.Item label='10' value='10' />
+                        </Picker>  
+                        <Text style={styles.modalText}>How Many Bathrooms</Text>
                         <Picker
                             selectedValue={this.state.bathrooms}
                             onValueChange={itemValue => this.setState({bathrooms: itemValue})}
@@ -245,101 +257,95 @@ class NewProperty extends Component {
                     onRequestClose={() => this.toggleApplianceModal()}
                 >
                     <SafeAreaView>
-
-                    <View style={styles.modal}>
-                    <Text style={styles.modalTitle}>Appliances Included</Text>                                             
-                    
-                        <CheckBox 
-                            title='Water Heater'
-                            center
-                            checked={this.state.waterheater}
-                            onPress={() => this.setState({waterheater: !this.state.waterheater})}
-                            containerStyle={styles.formCheckbox}
-                        />  
-                        <CheckBox 
-                            title='Air Conditioner'
-                            center
-                            checked={this.state.airconditioner}
-                            onPress={() => this.setState({airconditioner: !this.state.airconditioner})}
-                            containerStyle={styles.formCheckbox}
-                        />                          
-                        <CheckBox 
-                            title='Furnace'
-                            center
-                            checked={this.state.furnace}
-                            onPress={() => this.setState({furnace: !this.state.furnace})}
-                            containerStyle={styles.formCheckbox}
-                        /> 
-                        <CheckBox 
-                            title='Washer'
-                            center
-                            checked={this.state.washer}
-                            onPress={() => this.setState({washer: !this.state.washer})}
-                            containerStyle={styles.formCheckbox}
-                        /> 
-                        <CheckBox 
-                            title='Dryer'
-                            center
-                            checked={this.state.dryer}
-                            onPress={() => this.setState({dryer: !this.state.dryer})}
-                            containerStyle={styles.formCheckbox}
-                        />           
-                        <CheckBox 
-                            title='Dishwasher'
-                            center
-                            checked={this.state.dishwasher}
-                            onPress={() => this.setState({dishwasher: !this.state.dishwasher})}
-                            containerStyle={styles.formCheckbox}
-                        />            
-                        <CheckBox 
-                            title='Stove'
-                            center
-                            checked={this.state.stove}
-                            onPress={() => this.setState({stove: !this.state.stove})}
-                            containerStyle={styles.formCheckbox}
-                        />    
-                        <CheckBox 
-                            title='Range Hood'
-                            center
-                            checked={this.state.rangehood}
-                            onPress={() => this.setState({rangehood: !this.state.rangehood})}
-                            containerStyle={styles.formCheckbox}
-                        /> 
-                        <CheckBox 
-                            title='Microwave Range Hood'
-                            center
-                            checked={this.state.microwaverangehood}
-                            onPress={() => this.setState({microwaverangehood: !this.state.microwaverangehood})}
-                            containerStyle={styles.formCheckbox}
-                        />  
-                        <CheckBox 
-                            title='Refrigerator'
-                            center
-                            checked={this.state.refrigerator}
-                            onPress={() => this.setState({refrigerator: !this.state.refrigerator})}
-                            containerStyle={styles.formCheckbox}
-                        />         
-                        <CheckBox 
-                            title='Garage Door Opener'
-                            center
-                            checked={this.state.garagedooropener}
-                            onPress={() => this.setState({garagedooropener: !this.state.garagedooropener})}
-                            containerStyle={styles.formCheckbox}
-                        />                                                                                                                                                 
-                    </View>
-                        <View style={styles.modal}>
-                            <Text style={styles.formLabel}></Text>      
-                            <View>
-                                 
+                        <ScrollView>
+                            <View style={styles.modal}>
+                                <Text style={styles.modalTitle}>Appliances Included</Text>                                             
+                            
+                                <CheckBox 
+                                    title='Water Heater'
+                                    center
+                                    checked={this.state.waterheater}
+                                    onPress={() => this.setState({waterheater: !this.state.waterheater})}
+                                    containerStyle={styles.formCheckbox}
+                                />  
+                                <CheckBox 
+                                    title='Air Conditioner'
+                                    center
+                                    checked={this.state.airconditioner}
+                                    onPress={() => this.setState({airconditioner: !this.state.airconditioner})}
+                                    containerStyle={styles.formCheckbox}
+                                />                          
+                                <CheckBox 
+                                    title='Furnace'
+                                    center
+                                    checked={this.state.furnace}
+                                    onPress={() => this.setState({furnace: !this.state.furnace})}
+                                    containerStyle={styles.formCheckbox}
+                                /> 
+                                <CheckBox 
+                                    title='Washer'
+                                    center
+                                    checked={this.state.washer}
+                                    onPress={() => this.setState({washer: !this.state.washer})}
+                                    containerStyle={styles.formCheckbox}
+                                /> 
+                                <CheckBox 
+                                    title='Dryer'
+                                    center
+                                    checked={this.state.dryer}
+                                    onPress={() => this.setState({dryer: !this.state.dryer})}
+                                    containerStyle={styles.formCheckbox}
+                                />           
+                                <CheckBox 
+                                    title='Dishwasher'
+                                    center
+                                    checked={this.state.dishwasher}
+                                    onPress={() => this.setState({dishwasher: !this.state.dishwasher})}
+                                    containerStyle={styles.formCheckbox}
+                                />            
+                                <CheckBox 
+                                    title='Stove'
+                                    center
+                                    checked={this.state.stove}
+                                    onPress={() => this.setState({stove: !this.state.stove})}
+                                    containerStyle={styles.formCheckbox}
+                                />    
+                                <CheckBox 
+                                    title='Range Hood'
+                                    center
+                                    checked={this.state.rangehood}
+                                    onPress={() => this.setState({rangehood: !this.state.rangehood})}
+                                    containerStyle={styles.formCheckbox}
+                                /> 
+                                <CheckBox 
+                                    title='Microwave Range Hood'
+                                    center
+                                    checked={this.state.microwaverangehood}
+                                    onPress={() => this.setState({microwaverangehood: !this.state.microwaverangehood})}
+                                    containerStyle={styles.formCheckbox}
+                                />  
+                                <CheckBox 
+                                    title='Refrigerator'
+                                    center
+                                    checked={this.state.refrigerator}
+                                    onPress={() => this.setState({refrigerator: !this.state.refrigerator})}
+                                    containerStyle={styles.formCheckbox}
+                                />         
+                                <CheckBox 
+                                    title='Garage Door Opener'
+                                    center
+                                    checked={this.state.garagedooropener}
+                                    onPress={() => this.setState({garagedooropener: !this.state.garagedooropener})}
+                                    containerStyle={styles.formCheckbox}
+                                />                                                                                                                                                 
                             </View>
-                            <View>
+                            <View style={styles.modal}>
                                 <Button 
                                     title='Confirm'
                                     onPress={() => {this.toggleApplianceModal()}}
                                 />
-                            </View> 
-                        </View>
-
+                            </View>
+                        </ScrollView>
                     </SafeAreaView>
                 </Modal>	
 
@@ -352,32 +358,41 @@ class NewProperty extends Component {
                     <SafeAreaView>
 
                         <View style={styles.modal}>
-                        <Text style={styles.modalTitle}>Miscellaneous Maria?</Text>                                             
-                        </View>
+                            <Text style={styles.modalTitle}>House Miscellaneous</Text>                                             
+                        
+                            <Text style={styles.modalText}>Sewer Type: </Text>  
+                            <Picker  
+                                selectedValue={this.state.sewertype}
+                                onValueChange={itemValue => this.setState({sewertype: itemValue})}
+                            >
+                                <Picker.Item label='Sewer' value='Sewer' />
+                                <Picker.Item label='Septic' value='Septic' />
+                            </Picker> 
+                    
+                            <CheckBox 
+                                title='Pool'
+                                center
+                                checked={this.state.pool}
+                                onPress={() => this.setState({pool: !this.state.pool})}
+                                containerStyle={styles.formCheckbox}
+                            />    
+                            <CheckBox 
+                                title='HOA'
+                                center
+                                checked={this.state.hoa}
+                                onPress={() => this.setState({hoa: !this.state.hoa})}
+                                containerStyle={styles.formCheckbox}
+                            />                       
+                            <CheckBox 
+                                title='Pet Friendly'
+                                center
+                                checked={this.state.petfriendly}
+                                onPress={() => this.setState({petfriendly: !this.state.petfriendly})}
+                                containerStyle={styles.formCheckbox}
+                            />        
+                        </View>                  
 
-                        <CheckBox 
-                        title='Pool'
-                        center
-                        checked={this.state.pool}
-                        onPress={() => this.setState({pool: !this.state.pool})}
-                        containerStyle={styles.formCheckbox}
-                    />    
-                    <CheckBox 
-                        title='HOA'
-                        center
-                        checked={this.state.hoa}
-                        onPress={() => this.setState({hoa: !this.state.hoa})}
-                        containerStyle={styles.formCheckbox}
-                    />                       
-                    <CheckBox 
-                        title='Pet Friendly'
-                        center
-                        checked={this.state.petfriendly}
-                        onPress={() => this.setState({petfriendly: !this.state.petfriendly})}
-                        containerStyle={styles.formCheckbox}
-                    />                          
-
-                        <View>
+                        <View style={styles.modal}>
                             <Button 
                                 title='Confirm'
                                 onPress={() => {this.toggleMiscellaneousModal()}}
@@ -395,7 +410,7 @@ class NewProperty extends Component {
                     <SafeAreaView>
 
                         <View style={styles.modal}>
-                        <Text style={styles.modalTitle}>Utilities Maria?</Text>                                             
+                        <Text style={styles.modalTitle}>House Utilities</Text>                                             
                         </View>
 
                         <Input
@@ -423,14 +438,87 @@ class NewProperty extends Component {
                             leftIconContainerStyle={styles.formIcon}
                         />                          
 
-                        <View>
+                        <View style={styles.modal}>
                             <Button 
                                 title='Confirm'
                                 onPress={() => {this.toggleUtilitiesModal()}}
                             />
                         </View>                         
                     </SafeAreaView>
-                </Modal>                    
+                </Modal>  
+
+                <Modal
+                    animationType={'slide'}
+                    transparent={false}
+                    visible={this.state.showConfirmationModal}
+                    onRequestClose={() => this.toggleConfirmationModal()}
+                >
+                    <SafeAreaView>
+                        <ScrollView>
+                            <View style={styles.modal}>
+                                <Text style={styles.modalTitle}>Confirm House Details</Text>                                             
+                            </View>
+                            <View>
+                                <Text style={styles.modalTitle}>House Information</Text>     
+                                <View style={styles.modal}>
+                                    <Text style={styles.modalText}>Address:  {this.state.address}</Text>
+                                    <Text style={styles.modalText}>sqft:  {this.state.sqft}</Text>                        
+                                    <Text style={styles.modalText}>HOA:  {this.state.hoa ? '✅' : '❌'}</Text>     
+                                    <Text style={styles.modalText}>Electric Provider: {this.state.electricprovider}</Text>   
+                                    <Text style={styles.modalText}>Water Provider: {this.state.waterprovider}</Text>
+                                    <Text style={styles.modalText}>Fuel Provider: {this.state.fuelprovider}</Text>                                
+                                </View>
+                            </View>
+                            <View>
+                                <Text style={styles.modalTitle}>House Spaces</Text>
+                                <View style={styles.modal}>
+                                    <Text style={styles.modalText}>Number of Bedrooms:  {this.state.bedrooms}</Text>       
+                                    <Text style={styles.modalText}>Number of Bathrooms:  {this.state.bathrooms}</Text> 
+                                    <Text style={styles.modalText}>Half Bathroom: {this.state.halfbathroom ? '✅' : '❌'}</Text>   
+                                </View>
+                            </View>
+                            <View>
+                                <Text style={styles.modalTitle}>Included Appliances</Text>
+                            </View>
+                            <View style={styles.modal}>
+                                <Text style={styles.modalText}>Water Heater:{this.state.waterheater ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>A/C: {this.state.airconditioner ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Furnace: {this.state.furnace ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Washer: {this.state.washer ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Dryer: {this.state.dryer ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Dishwasher: {this.state.dishwasher ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Stove: {this.state.stove ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Range Hood: {this.state.rangehood ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>MicrowaveRange Hood: {this.state.microwaverangehood ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Refrigerator: {this.state.refrigerator ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Garage Door Opener: {this.state.garagedooropener ? '✅' : '❌'}</Text> 
+                            </View>
+                            <View>
+                                <Text style={styles.modalTitle}>House Miscellaneous</Text>
+                            </View>
+                            <View style={styles.modal}>
+                                <Text style={styles.modalText}>Sewer Type: {this.state.sewertype}</Text> 
+                                <Text style={styles.modalText}>Pet Friendly: {this.state.petfriendly ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Pool: {this.state.pool ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Notes: {this.state.notes}</Text>                                                                                            
+                            </View>             
+                                                    
+                            <View style={styles.modal}> 
+                
+                                <Button 
+                                    title='Back to Edit House'
+                                    buttonStyle={{backgroundColor: 'red', margin: 10}}
+                                    onPress={() => {this.toggleConfirmationModal(), console.log("Canceled Confirm House")}}
+                                />
+                                <Button 
+                                    title='Confirm'
+                                    buttonStyle={{margin: 10}}
+                                    onPress={() => {this.handleNewHouse(), this.toggleConfirmationModal(), console.log(JSON.stringify(this.state))}}
+                                />
+                            </View>  
+                        </ScrollView>                        
+                    </SafeAreaView>
+                </Modal>                                   
 
             </ScrollView>
         )
@@ -486,8 +574,26 @@ const styles = StyleSheet.create({
         backgroundColor: '#5637DD',
         textAlign: 'center',
         color: '#fff',
-        marginBottom: 20
+        marginTop: 5,
+        marginBottom: 10
     },
+    bold: {
+        fontWeight: 'bold'
+    },
+    modalText: {
+
+
+
+        fontSize: 18,
+        margin: 10
+    }	,
+    cardRow: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        margin: 20
+    },    
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewProperty)

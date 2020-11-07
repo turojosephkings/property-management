@@ -1,5 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
+import { tenants } from './tenants';
+import { owners } from './owners';
 
 export const postHouse = (address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => dispatch =>  {
 
@@ -162,4 +164,80 @@ export const paymentordersFailed = errMess => ({
 export const addPaymentorders = paymentorders => ({
     type: ActionTypes.ADD_PAYMENTORDERS,
     payload: paymentorders
+});
+
+export const fetchTenants = () => dispatch => {
+
+    dispatch(tenantsLoading());
+
+    return fetch(baseUrl + 'tenants')
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                const errMess = new Error(error.message);
+                throw errMess;
+            })
+        .then(response => response.json())
+        .then(tenants => dispatch(addTenants(tenants)))
+        .catch(error => dispatch(tenantsFailed(error.message)));
+};
+
+export const tenantsLoading = () => ({
+    type: ActionTypes.TENANTS_LOADING
+});
+
+export const tenantsFailed = errMess => ({
+    type: ActionTypes.TENANTS_FAILED,
+    payload: errMess
+});
+
+export const addTenants = tenants => ({
+    type: ActionTypes.ADD_TENANTS,
+    payload: tenants
+});
+
+
+
+export const fetchOwners = () => dispatch => {
+
+    dispatch(ownersLoading());
+
+    return fetch(baseUrl + 'owners')
+        .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                    error.response = response;
+                    throw error;
+                }
+            },
+            error => {
+                const errMess = new Error(error.message);
+                throw errMess;
+            })
+        .then(response => response.json())
+        .then(tenants => dispatch(addOwners(owners)))
+        .catch(error => dispatch(tenantsFailed(error.message)));
+};
+
+export const ownersLoading = () => ({
+    type: ActionTypes.OWNERS_LOADING
+});
+
+export const ownersFailed = errMess => ({
+    type: ActionTypes.OWNERS_FAILED,
+    payload: errMess
+});
+
+export const addOwners = owners => ({
+    type: ActionTypes.ADD_OWNERS,
+    payload: owners
 });
