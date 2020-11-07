@@ -9,45 +9,13 @@ import HouseDirectory from './HouseDirectoryComponent';
 const mapStateToProps = state => {
     return {
         houses: state.houses,
-        workorders: state.workorders,
-        paymentorders: state.paymentorders
+        workorders: state.workorders
     };
 };
 
 
 
-function RenderHouses({houses}) {
 
-    
-    const renderHouseItem = ({item}) => {
-
-        return (
-            <ListItem
-                leftAvatar={{ source: {uri: baseUrl + item.image}}}
-                title={item.address}
-                subtitle={item.owner}
-                featured  
-                onPress={() => 
-                    //this.props.chooseHouse(item.id, item.address)
-                    console.log('aqui')//(JSON.stringify(this.props.houseId))
-                }
-            />
-        );
-    }
-
-
-    
-    return (
-        <Card title='Select Property'>
-
-            <FlatList
-                data={houses}
-                renderItem={renderHouseItem}
-                keyExtractor={item => item.id}
-            />
-        </Card>
-    )
-}
 
 
 
@@ -95,10 +63,10 @@ class NewOrder extends Component {
         this.setState({showModal: !this.setState.showModal});
     }
 
-    chooseHouse(hId, add) {
+    chooseHouse(id, address) {
         this.setState({
-            houseId: hId,
-            address: add
+            id,
+            address
         })
     }
 
@@ -108,6 +76,41 @@ class NewOrder extends Component {
 
 
     render() {
+
+        const RenderHouses = ({houses}) => {
+
+    
+            const renderHouseItem = ({item}) => {
+        
+                return (
+                    <ListItem
+                        leftAvatar={{ source: {uri: baseUrl + item.image}}}
+                        title={item.address}
+                        subtitle={item.owner}
+                        featured  
+                        onPress={ ()=> //this.setState({address: item.address}),
+                            //this.props.chooseHouse(item.id, item.address),
+                            //this.props.chooseHouse(item.id, item.address)
+                            console.log(item.id)//, console.log(this.state.setState({houseId: 1})) //, 
+                            //console.log(JSON.stringify(this.state))
+                        }
+                    />
+                );
+            }
+        
+        
+            
+            return (
+                <Card title='Select Property'>
+        
+                    <FlatList
+                        data={houses}
+                        renderItem={renderHouseItem}
+                        keyExtractor={item => item.id}
+                    />
+                </Card>
+            )
+        }
 
         const { navigate } = this.props.navigation;
         const houses = this.props.houses.houses
