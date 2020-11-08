@@ -7,13 +7,14 @@ import NewOrder from './NewOrderComponent';
 import Login from './LoginComponent';
 import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import { connect } from 'react-redux';
 import { fetchHouses, fetchWorkorders, fetchPaymentorders } from '../redux/ActionCreators';
 import { Icon } from 'react-native-elements';
+import PropertiesTab from './PropertiesTabComponent';
 import NewProperty from './NewProperty';
 import NewOrderComponent from './NewOrderComponent';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 const mapDispatchToProps = {
     fetchHouses,
@@ -28,10 +29,9 @@ const HouseDirectoryNavigator = createStackNavigator(
             screen: HouseDirectory,
             navigationOptions: ({navigation}) => ({
                 headerLeft: <Icon
-                    name='navicon'
-                    type='evilicon'
+                    name='folder-open'
+                    type='font-awesome'
                     iconStyle={styles.stackIcon}
-                    onPress={() => navigation.toggleDrawer()}
                 />
             }) 
         }, 
@@ -61,7 +61,6 @@ const WorkOrderNavigator = createStackNavigator(
                                 name='wrench'
                                 type='font-awesome'
                                 iconStyle={styles.stackIcon}
-                                onPress={() => navigation.toggleDrawer()}
                             />
             }) 
         },
@@ -71,7 +70,7 @@ const WorkOrderNavigator = createStackNavigator(
                             name='file-text'
                             type='font-awesome'
                             iconStyle={styles.stackIcon}
-                            onPress={() => navigation.toggleDrawer()}                            
+                                                    
                         />
             })  
         }
@@ -108,7 +107,6 @@ const HomeNavigator = createStackNavigator(
                 name='dashboard'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
-                onPress={() => navigation.toggleDrawer()}
             />
         })
     } 
@@ -131,10 +129,46 @@ const NewPropertyNavigator = createStackNavigator(
                 name='plus-circle'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
-                onPress={() => navigation.toggleDrawer()}
+
             />
         })
     } 
+);
+
+const PropertiesTabNavigator = createStackNavigator(
+    {
+        PropertiesTab: { screen: PropertiesTab},
+        HouseDirectory: { 
+            screen: HouseDirectory,
+            navigationOptions: ({navigation}) => ({
+                headerLeft: <Icon
+                    name='folder-open'
+                    type='font-awesome'
+                    iconStyle={styles.stackIcon}
+                />
+            }) 
+        }, 
+        HouseInfo: 
+        { screen: HouseInfo },       
+        NewProperty: { screen: NewProperty }
+    },
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle:{
+                color: '#fff'
+            },
+            headerLeft: <Icon
+                name='plus-circle'
+                type='font-awesome'
+                iconStyle={styles.stackIcon}
+            />
+        })
+    } 
+    
 );
 
 const LoginNavigator = createStackNavigator(
@@ -154,17 +188,41 @@ const LoginNavigator = createStackNavigator(
                 name='sign-in'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
-                onPress={() => navigation.toggleDrawer()}
             />
         })
     } 
 );
 
-const MainNavigator = createDrawerNavigator(
+
+const MainNavigator = createBottomTabNavigator(
     {
+        Overview: { screen: HomeNavigator,
+            navigationOptions: {
+                tabBarIcon: ({tintColor}) => (
+                    <Icon
+                    name='dashboard'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
+        },        
+        Properties: { screen: PropertiesTabNavigator, 
+            navigationOptions: {
+                tabBarIcon:({tintColor}) => (
+                    <Icon
+                    name='plus-circle'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            } 
+        },
         Login: { screen: LoginNavigator,
             navigationOptions: {
-                drawerIcon: ({tintColor}) => (
+                tabBarIcon: ({tintColor}) => (
                     <Icon
                     name='sign-in'
                     type='font-awesome'
@@ -174,47 +232,11 @@ const MainNavigator = createDrawerNavigator(
                 )
             }
         },
-        Overview: { screen: HomeNavigator,
-            navigationOptions: {
-                drawerIcon: ({tintColor}) => (
-                    <Icon
-                    name='dashboard'
-                    type='font-awesome'
-                        size={24}
-                        color={tintColor}
-                    />
-                )
-            }
-        },
-        HouseDirectory: { screen: HouseDirectoryNavigator, 
-            navigationOptions: {
-                drawerIcon: ({tintColor}) => (
-                    <Icon
-                    name='list-ul'
-                    type='font-awesome'
-                        size={24}
-                        color={tintColor}
-                    />
-                )
-            }
-        },
         WorkOrder: { screen: WorkOrderNavigator, 
             navigationOptions: {
-                drawerIcon: ({tintColor}) => (
+                tabBarIcon: ({tintColor}) => (
                     <Icon
-                    name='wrench'
-                    type='font-awesome'
-                        size={24}
-                        color={tintColor}
-                    />
-                )
-            } 
-        },
-        NewProperty: { screen: NewPropertyNavigator, 
-            navigationOptions: {
-                drawerIcon: ({tintColor}) => (
-                    <Icon
-                    name='plus-circle'
+                    name='building-o'
                     type='font-awesome'
                         size={24}
                         color={tintColor}
@@ -222,11 +244,14 @@ const MainNavigator = createDrawerNavigator(
                 )
             } 
         }
+        
     },
     {
         drawerBackgroundColor: '#CEC8FF'
     }
 )
+
+
 
 const AppNavigator = createAppContainer(MainNavigator); 
 
