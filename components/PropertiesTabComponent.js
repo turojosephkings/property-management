@@ -36,14 +36,6 @@ class PropertiesTab extends Component {
                         buttonStyle={styles.Buttons}
                     />
                 </View>
-                <View>
-
-                    <Button 
-                        title='View Payment Orders'
-                        //onPress={() => navigate('Payment')}
-                        buttonStyle={styles.Buttons}
-                    />
-                </View>
             </ScrollView>
         )
     }

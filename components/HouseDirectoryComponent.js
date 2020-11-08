@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, FlatList, Text } from 'react-native';
-import { ListItem, Tile } from 'react-native-elements';
+import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { ListItem, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 
@@ -48,13 +48,29 @@ class HouseDirectory extends Component {
             );
         }
         return (
-            <FlatList 
-                data={this.props.houses.houses}
-                renderItem={renderHouseDirectoryItem}
-                keyExtractor={item => item.id.toString()}
-            />
+            <View>
+                <View>
+                    <Button 
+                        title='Create New Property'
+                        onPress={() => navigate('NewProperty')}
+                        buttonStyle={styles.Buttons}
+                    />
+                    <FlatList 
+                        data={this.props.houses.houses}
+                        renderItem={renderHouseDirectoryItem}
+                        keyExtractor={item => item.id.toString()}
+                    />
+                </View>
+            </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+
+    Buttons: {
+        margin: 40
+    }
+})
 
 export default connect(mapStateToProps)(HouseDirectory);
