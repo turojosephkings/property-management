@@ -20,7 +20,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     fetchHouses,
-    postHouse: (address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => (postHouse(address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes)),
+    postHouse: (address, owner, tenant, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => (postHouse(address, owner, tenant, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes)),
 }
 
 class NewProperty extends Component {
@@ -37,6 +37,8 @@ class NewProperty extends Component {
             showConfirmationModal: false,
             id: '',
             address: '',
+            owner: '',
+            tenant: '',
             imageUrl: baseUrl + './images/iconHouse.jpg',
             sqft: '',
             hoa: false,
@@ -96,7 +98,7 @@ class NewProperty extends Component {
     }
     
     handleNewHouse() {
-        this.props.postHouse(this.state.address, this.state.imageUrl, this.state.sqft, this.state.hoa, this.state.electricprovider, this.state.waterprovider, this.state.fuelprovider, this.state.bedrooms, this.state.bathrooms, this.state.halfbathroom, this.state.waterheater, this.state.airconditioner, this.state.furnace, this.state.washer, this.state.dryer, this.state.dishwasher, this.state.stove, this.state.rangehood, this.state.microwaverangehood, this.state.refrigerator, this.state.garagedooropener, this.state.sewertype, this.state.petfriendly, this.state.pool, this.state.notes);
+        this.props.postHouse(this.state.address, this.state.owner, this.state.tenant, this.state.imageUrl, this.state.sqft, this.state.hoa, this.state.electricprovider, this.state.waterprovider, this.state.fuelprovider, this.state.bedrooms, this.state.bathrooms, this.state.halfbathroom, this.state.waterheater, this.state.airconditioner, this.state.furnace, this.state.washer, this.state.dryer, this.state.dishwasher, this.state.stove, this.state.rangehood, this.state.microwaverangehood, this.state.refrigerator, this.state.garagedooropener, this.state.sewertype, this.state.petfriendly, this.state.pool, this.state.notes);
     }   
     
     resetForm() {
@@ -108,6 +110,8 @@ class NewProperty extends Component {
             showConfirmationModal: false,
             id: '',
             address: '',
+            owner: '',
+            tenant: '',
             imageUrl: baseUrl + './images/iconHouse.jpg',
             sqft: '',
             hoa: false,
@@ -178,7 +182,23 @@ class NewProperty extends Component {
                         value={this.state.address}
                         containerStyle={styles.formInput}
                         leftIconContainerStyle={styles.formIcon}
-                    />                                                          
+                    />       
+                    <Input
+                        placeholder='Owner'
+                        leftIcon={{type: 'font-awesome', name: 'book'}}
+                        onChangeText={owner => this.setState({owner})}
+                        value={this.state.owner}
+                        containerStyle={styles.formInput}
+                        leftIconContainerStyle={styles.formIcon}
+                    /> 
+                    <Input
+                        placeholder='Tenant'
+                        leftIcon={{type: 'font-awesome', name: 'handshake-o'}}
+                        onChangeText={tenant => this.setState({tenant})}
+                        value={this.state.tenant}
+                        containerStyle={styles.formInput}
+                        leftIconContainerStyle={styles.formIcon}
+                    />                                                                                            
                     <View style={{margin: 10}} >
                         <Button 
                             title='Spaces'

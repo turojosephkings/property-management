@@ -3,10 +3,12 @@ import { baseUrl } from '../shared/baseUrl';
 import { tenants } from './tenants';
 import { owners } from './owners';
 
-export const postHouse = (address, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => dispatch =>  {
+export const postHouse = (address, owner, tenant, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => dispatch =>  {
 
     const newHouse = {
         address,
+        owner, 
+        tenant,
         imageUrl,
         sqft,
         hoa,

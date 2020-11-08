@@ -20,12 +20,14 @@ class HouseDirectory extends Component {
         const { navigate } = this.props.navigation;
         const renderHouseDirectoryItem = ({item}) => {
             return (
-                <Tile
+                <ListItem
+                
                     title={item.address}
-                    caption={item.sqft}
+                    subtitle={`Owner: ${item.owner}, Tenant: ${item.tenant}`}
                     featured  
                     onPress={() => navigate('HouseInfo', { houseId: item.id })}               
-                    imageSrc={{uri: baseUrl + item.image}}
+                    leftAvatar={{ source:{ uri: baseUrl + item.image}}}
+                    chevron
                 />
             );
         };
