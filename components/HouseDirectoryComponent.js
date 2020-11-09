@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, FlatList, Text, StyleSheet } from 'react-native';
-import { ListItem, Button } from 'react-native-elements';
+import { ListItem, Button, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 
@@ -12,12 +12,63 @@ const mapStateToProps = state => {
 
 class HouseDirectory extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            data: this.props.houses.houses,
+            fullData: this.props.houses.houses,
+            query: ''
+            
+        }
+    }
+
     static navigationOptions = {
         title: 'House Directory'
     };
 
+    renderHeader = () => {    
+        return (      
+          <Input  
+            autoCapitalize='none'
+            autoCorrect={false}      
+            placeholder="Search Address Here..."                 
+            onChangeText={text => this.searchFilterFunction(text)}
+            autoCorrect={false} 
+            inputStyle={{        borderRadius: 25,
+                borderColor: '#333',
+                backgroundColor: '#fff'}}       
+          />    
+        );  
+    };
+
+    searchFilterFunction = text => {    
+        const formattedQuery = text.toLowerCase();
+
+        
+        const data = this.state.fullData.filter(address => { 
+            return this.contains(address, formattedQuery)
+        })
+
+        this.setState({ data, query: text }); 
+    }
+
+    contains = ({ address }, query) => {
+
+        if (address.toLowerCase().includes(query)) {
+          return true
+        }
+        return false
+    }
+        
+         
+
+
     render() {
         const { navigate } = this.props.navigation;
+
+
+        
         const renderHouseDirectoryItem = ({item}) => {
             return (
                 <ListItem
@@ -50,15 +101,12 @@ class HouseDirectory extends Component {
         return (
             <View>
                 <View>
-                    <Button 
-                        title='Create New Property'
-                        onPress={() => navigate('NewProperty')}
-                        buttonStyle={styles.Buttons}
-                    />
-                    <FlatList 
-                        data={this.props.houses.houses}
+                    <FlatList                        
+                        ListHeaderComponent={this.renderHeader}    
+                        data={this.state.data}
                         renderItem={renderHouseDirectoryItem}
-                        keyExtractor={item => item.id.toString()}
+                        keyExtractor={item => item.id}
+ 
                     />
                 </View>
             </View>

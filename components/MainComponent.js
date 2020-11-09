@@ -212,7 +212,7 @@ const MainNavigator = createBottomTabNavigator(
             navigationOptions: {
                 tabBarIcon:({tintColor}) => (
                     <Icon
-                    name='plus-circle'
+                    name='building-o'
                     type='font-awesome'
                         size={24}
                         color={tintColor}
