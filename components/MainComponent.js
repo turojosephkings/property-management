@@ -16,6 +16,7 @@ import PeopleTab from './PeopleTabComponent';
 import NewProperty from './NewProperty';
 import NewOrderComponent from './NewOrderComponent';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import NewPerson from './NewPerson';
 
 const mapDispatchToProps = {
     fetchHouses,
@@ -151,7 +152,14 @@ const PropertiesTabNavigator = createStackNavigator(
         }, 
         HouseInfo: 
         { screen: HouseInfo },       
-        NewProperty: { screen: NewProperty }
+        NewProperty: { screen: NewProperty,
+            navigationOptions: ({navigation}) => ({
+                headerLeft: <Icon
+                    name='folder-open'
+                    type='font-awesome'
+                    iconStyle={styles.stackIcon}
+                />
+            })  }
     },
     {
         defaultNavigationOptions: ({navigation}) => ({
@@ -175,8 +183,18 @@ const PropertiesTabNavigator = createStackNavigator(
 const PeopleTabNavigator = createStackNavigator(
     {
         PeopleTab: { screen: PeopleTab},
-        
+        NewPerson: { 
+            screen: NewPerson,
+            navigationOptions: ({navigation}) => ({
+                headerLeft: <Icon
+                    name='user-plus'
+                    type='font-awesome'
+                    iconStyle={styles.stackIcon}
+                />
+            }) 
+        },     
     },
+
     {
         defaultNavigationOptions: ({navigation}) => ({
             headerStyle: {

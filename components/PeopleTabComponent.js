@@ -37,7 +37,7 @@ class PeopleTab extends Component {
                     />
                     <Button 
                         title='Create New Person'
-                        //onPress={() => navigate('NewProperty')}
+                        onPress={() => navigate('NewPerson')}
                         buttonStyle={styles.Buttons}
                     />                    
                 </View>
