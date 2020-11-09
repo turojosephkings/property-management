@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { fetchHouses, fetchWorkorders, fetchPaymentorders } from '../redux/ActionCreators';
 import { Icon } from 'react-native-elements';
 import PropertiesTab from './PropertiesTabComponent';
+import PeopleTab from './PeopleTabComponent';
 import NewProperty from './NewProperty';
 import NewOrderComponent from './NewOrderComponent';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -162,7 +163,31 @@ const PropertiesTabNavigator = createStackNavigator(
                 color: '#fff'
             },
             headerLeft: <Icon
-                name='plus-circle'
+                name='building'
+                type='font-awesome'
+                iconStyle={styles.stackIcon}
+            />
+        })
+    } 
+    
+);
+
+const PeopleTabNavigator = createStackNavigator(
+    {
+        PeopleTab: { screen: PeopleTab},
+        
+    },
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle:{
+                color: '#fff'
+            },
+            headerLeft: <Icon
+                name='users'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
             />
@@ -220,6 +245,18 @@ const MainNavigator = createBottomTabNavigator(
                 )
             } 
         },
+        People: { screen: PeopleTabNavigator, 
+            navigationOptions: {
+                tabBarIcon:({tintColor}) => (
+                    <Icon
+                    name='users'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            } 
+        },
         Login: { screen: LoginNavigator,
             navigationOptions: {
                 tabBarIcon: ({tintColor}) => (
@@ -245,9 +282,6 @@ const MainNavigator = createBottomTabNavigator(
             } 
         }
         
-    },
-    {
-        drawerBackgroundColor: '#CEC8FF'
     }
 )
 

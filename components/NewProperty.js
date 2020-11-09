@@ -9,6 +9,8 @@ import * as Permissions from 'expo-permissions';
 import { SafeAreaView } from 'react-navigation';
 import { color } from 'react-native-reanimated';
 import { fetchHouses } from '../redux/ActionCreators';
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as MediaLibrary from 'expo-media-library';
 
 const mapStateToProps = state => {
     return {
@@ -150,12 +152,39 @@ class NewProperty extends Component {
                 allowsEditing: true,
                 aspect: [1,1]
             });
-            if(!capturedImage.cancelled) {
-                console.log(capturedImage);
-                this.setState({imageUrl: capturedImage.uri})
+            if (!capturedImage.cancelled) {
+                console.log(capturedImage.uri)
+                const asset = await MediaLibrary.createAssetAsync(capturedImage.uri);
+               this.processImage(capturedImage.uri)
             }
         }
     }
+
+    processImage = async (imgUri) => {
+
+        const processedImage = await ImageManipulator.manipulateAsync(imgUri, [{ resize: { width: 400 } }], { compress: 1, format: ImageManipulator.SaveFormat.PNG});
+
+        if (processedImage){
+            console.log(processedImage);
+            this.setState({imageUrl: processedImage.uri})
+        }
+        
+    }
+
+    getImageFromGallery = async () => {
+
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (cameraRollPermission.status === 'granted') {
+            const capturedImage = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [1,1]
+            });
+            if (!capturedImage.cancelled) {
+                console.log(capturedImage.uri)
+               this.processImage(capturedImage.uri)
+            }
+        }        
+    }    
 
     render() {
    
@@ -170,10 +199,14 @@ class NewProperty extends Component {
                             loadingIndicatorSource={require('./images/iconHouse.jpg')}
                             style={styles.image}
                         />
-                        <Button
-                            title='Camera'
+                        <Button 
+                            title={'Camera'}
                             onPress={this.getImageFromCamera}
                         />
+                        <Button 
+                            title={'Gallery'}
+                            onPress={this.getImageFromGallery}
+                        />  
                     </View>
                     <Input
                         placeholder='Address'

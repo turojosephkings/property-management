@@ -86,7 +86,7 @@ class HouseDirectory extends Component {
             return(
                 <View>
                     <Text>
-                        Y ahora que?
+                        Loading
                     </Text>
                 </View>
             )
