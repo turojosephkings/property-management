@@ -36,9 +36,9 @@ class NewPerson extends Component {
         super(props);
 
         this.state = {
-
+            showConfirmationModal: false,
             fullname: '',
-            imageUrl: '',
+            imageUrl: baseUrl + 'images/person.png',
             dln: '',
             phonenumber: '',
             email: '',
@@ -65,8 +65,9 @@ class NewPerson extends Component {
     
     resetForm() {
         this.setState({
+            showConfirmationModal: false,
             fullname: '',
-            imageUrl: '',
+            imageUrl: baseUrl + 'images/person.png',
             dln: '',
             phonenumber: '',
             email: '',
@@ -115,80 +116,95 @@ class NewPerson extends Component {
                this.processImage(capturedImage.uri)
             }
         }        
-    }    
+    }  
+    
+    toggleConfirmationModal() {
+        this.setState({showConfirmationModal: !this.state.showConfirmationModal});
+    } 
+
+    refreshTenants() {
+        this.props.fetchTenants();
+    }
+
+    refreshOwners() {
+        this.props.fetchOwners();
+    }
 
     render() {
 
         return(
-            <View>
+            <ScrollView>
                 <View style={styles.container}>
-                    <View style={styles.imageContainer}>
-                        <Image 
-                            source={{uri: this.state.imageUrl}}
-                            loadingIndicatorSource={require('./images/iconHouse.jpg')}
-                            style={styles.image}
-                        />
-                        <Button 
-                            title={'Camera'}
-                            onPress={this.getImageFromCamera}
-                        />
-                        <Button 
-                            title={'Gallery'}
-                            onPress={this.getImageFromGallery}
-                        />  
+                    <View style={styles.sections}>
+                        <Text style={styles.modalText}>Profile Picture</Text>
+                            <View style={styles.imageContainer}>                   
+                                <Image 
+                                    source={{uri: this.state.imageUrl}}
+                                    // loadingIndicatorSource={require('./images/icon-person')}
+                                    style={styles.image}
+                                />
+                                <Button 
+                                    title={'Camera'}
+                                    onPress={this.getImageFromCamera}
+                                />
+                                <Button 
+                                    title={'Gallery'}
+                                    onPress={this.getImageFromGallery}
+                                />  
+                            </View>
                     </View>
-                    <Input
-                        placeholder='Full Name'
-                        leftIcon={{type: 'font-awesome', name: 'user'}}
-                        onChangeText={fullname => this.setState({fullname})}
-                        value={this.state.fullname}
-                        containerStyle={styles.formInput}
-                        leftIconContainerStyle={styles.formIcon}
-                    />       
-                    <Input
-                        placeholder='Driver License Number'
-                        leftIcon={{type: 'font-awesome', name: 'id-card-o'}}
-                        onChangeText={dln => this.setState({dln})}
-                        value={this.state.dln}
-                        containerStyle={styles.formInput}
-                        leftIconContainerStyle={styles.formIcon}
-                    /> 
-                    <Input
-                        placeholder='Phone Number'
-                        leftIcon={{type: 'font-awesome', name: 'phone'}}
-                        onChangeText={phonenumber => this.setState({phonenumber})}
-                        value={this.state.phonenumber}
-                        containerStyle={styles.formInput}
-                        leftIconContainerStyle={styles.formIcon}
-                    />  
-                    <Input
-                        placeholder='E-mail'
-                        leftIcon={{type: 'font-awesome', name: 'envelope-o'}}
-                        onChangeText={email => this.setState({email})}
-                        value={this.state.email}
-                        containerStyle={styles.formInput}
-                        leftIconContainerStyle={styles.formIcon}
-                    />  
-                    <Text style={styles.modalText}>Role of this person:</Text>
-                    <Picker
-                        selectedValue={this.state.role}
-                        onValueChange={itemValue => this.setState({role: itemValue})}
-                    >
-                        <Picker.Item label='Tenant' value='Tenant' />
-                        <Picker.Item label='Owner' value='Owner' />
-                    </Picker>                                                                                                               
-                                                                            
+                    <View style={styles.sections}>
+                    <Text style={styles.modalText}>Personal Data</Text>                        
+                        <Input
+                            placeholder='Full Name'
+                            leftIcon={{type: 'font-awesome', name: 'user'}}
+                            onChangeText={fullname => this.setState({fullname})}
+                            value={this.state.fullname}
+                            containerStyle={styles.formInput}
+                            leftIconContainerStyle={styles.formIcon}
+                        />       
+                        <Input
+                            placeholder='Driver License Number'
+                            leftIcon={{type: 'font-awesome', name: 'id-card-o'}}
+                            onChangeText={dln => this.setState({dln})}
+                            value={this.state.dln}
+                            containerStyle={styles.formInput}
+                            leftIconContainerStyle={styles.formIcon}
+                        /> 
+                        <Input
+                            placeholder='Phone Number'
+                            leftIcon={{type: 'font-awesome', name: 'phone'}}
+                            onChangeText={phonenumber => this.setState({phonenumber})}
+                            value={this.state.phonenumber}
+                            containerStyle={styles.formInput}
+                            leftIconContainerStyle={styles.formIcon}
+                        />  
+                        <Input
+                            placeholder='E-mail'
+                            leftIcon={{type: 'font-awesome', name: 'envelope-o'}}
+                            onChangeText={email => this.setState({email})}
+                            value={this.state.email}
+                            containerStyle={styles.formInput}
+                            leftIconContainerStyle={styles.formIcon}
+                        />  
+                        <Text style={styles.modalText}>Role of this person:</Text>
+                        <View style={{padding: 5, margin: 10}}>
+                            <Picker
+                                selectedValue={this.state.role}
+                                onValueChange={itemValue => this.setState({role: itemValue})}
+                                style={{ flex: 1, height: 150, width: 250, alignSelf: 'center' }}
+                            >
+                                <Picker.Item label='Tenant' value='Tenant' />
+                                <Picker.Item label='Owner' value='Owner' />
+                            </Picker>                                                                                                               
+                        </View>
+                    </View>                                            
     
                     <View style={{margin: 10}} >
                         <Button 
                             title='Create Person!'
                             onPress={() => {
-                                if (this.state.role === 'Tenant')
-                                    this.handleNewTenant()
-                                //if (this.state.role === 'Owner')
-                                else     this.handleNewOwner()
-                                //   console.log(JSON.stringify(this.state))
-                                this.resetForm();
+                                this.toggleConfirmationModal()
                             }}
                             
                                 buttonStyle={styles.Buttons}
@@ -196,11 +212,55 @@ class NewPerson extends Component {
                     </View>     
    
                 </View>
+                <Modal
+                    animationType={'slide'}
+                    transparent={false}
+                    visible={this.state.showConfirmationModal}
+                    onRequestClose={() => this.toggleConfirmationModal()}
+                >
+                    <SafeAreaView>
+                        <ScrollView>
+                            <View style={styles.modal}>
+                                <Text style={styles.modalTitle}>Confirm Person Details</Text>                                             
+                            </View>
+                            <View>
+                                <View style={styles.modal}>
+                                    <Text style={styles.modalText}>Full Name:  {this.state.fullname}</Text>
+                                    <Text style={styles.modalText}>Driver License Number:  {this.state.dln}</Text>                                                            
+                                    <Text style={styles.modalText}>Phone Number {this.state.phonenumber}</Text>   
+                                    <Text style={styles.modalText}>Email: {this.state.email}</Text>
+                                    <Text style={styles.modalText}>Role: {this.state.role}</Text>                                
+                                </View>
+                            </View>
+                            
+                                                    
+                            <View style={styles.modal}> 
+                
+                                <Button 
+                                    title='Back to Edit Person'
+                                    buttonStyle={{backgroundColor: 'red', margin: 10}}
+                                    onPress={() => {this.toggleConfirmationModal(), console.log("Canceled Confirm Person")}}
+                                />
+                                <Button 
+                                    title='Confirm'
+                                    buttonStyle={{margin: 10}}
+                                    onPress={() => {
+                                        if (this.state.role === 'Tenant'){
+                                            this.handleNewTenant(), this.resetForm(), this.refreshTenants(), this.toggleConfirmationModal()
+                                        }
+                                        else {
+                                            this.handleNewOwner(), this.resetForm(), this.refreshTenants(), this.toggleConfirmationModal()
+                                        }
+                                    }}
+                                />
+                            </View>  
+                        </ScrollView>                        
+                    </SafeAreaView>
+                </Modal>
 
 
 
-
-            </View>
+            </ScrollView>
         )
     }
 
@@ -274,6 +334,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         margin: 20
     },    
+    sections: {
+        borderWidth: 0.5, 
+        borderColor: 'blue', 
+        borderStyle: 'solid',
+        padding: 2,
+        marginBottom: 5
+    }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewPerson)

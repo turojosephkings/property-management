@@ -41,7 +41,7 @@ class NewProperty extends Component {
             address: '',
             owner: '',
             tenant: '',
-            imageUrl: baseUrl + './images/iconHouse.jpg',
+          //  imageUrl: baseUrl + './images/iconHouse.jpg',
             sqft: '',
             hoa: false,
             electricprovider: '',
@@ -114,7 +114,7 @@ class NewProperty extends Component {
             address: '',
             owner: '',
             tenant: '',
-            imageUrl: baseUrl + './images/iconHouse.jpg',
+        //    imageUrl: baseUrl + './images/iconHouse.jpg',
             sqft: '',
             hoa: false,
             electricprovider: '',
@@ -196,7 +196,7 @@ class NewProperty extends Component {
                     <View style={styles.imageContainer}>
                         <Image 
                             source={{uri: this.state.imageUrl}}
-                            loadingIndicatorSource={require('./images/iconHouse.jpg')}
+                          //  loadingIndicatorSource={require('./images/iconHouse.jpg')}
                             style={styles.image}
                         />
                         <Button 
