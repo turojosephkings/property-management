@@ -205,6 +205,35 @@ export const addTenants = tenants => ({
     payload: tenants
 });
 
+export const postTenant = (fullname, imageUrl, dln, phonenumber, email, role) => dispatch =>  {
+
+    const newPerson = {
+        fullname,
+        imageUrl, 
+        dln, 
+        phonenumber, 
+        email, 
+        role
+    };
+
+    setTimeout(() => {
+        dispatch(addTenant(newPerson));
+    }, 2000);
+
+    fetch(baseUrl + "tenants", {
+        method: "POST",
+        body: JSON.stringify(newPerson),
+        headers: {
+            "Content-Type" : "application/json",
+        },
+    })
+}
+
+export const addTenant  = tenant => ({
+    type: ActionTypes.ADD_TENANT,
+    payload: tenant
+});
+
 
 
 export const fetchOwners = () => dispatch => {
@@ -243,3 +272,33 @@ export const addOwners = owners => ({
     type: ActionTypes.ADD_OWNERS,
     payload: owners
 });
+
+export const postOwner = (fullname, imageUrl, dln, phonenumber, email, role) => dispatch =>  {
+
+    const newPerson = {
+        fullname,
+        imageUrl, 
+        dln, 
+        phonenumber, 
+        email, 
+        role
+    };
+
+    setTimeout(() => {
+        dispatch(addOwner(newPerson));
+    }, 2000);
+
+    fetch(baseUrl + "owners", {
+        method: "POST",
+        body: JSON.stringify(newPerson),
+        headers: {
+            "Content-Type" : "application/json",
+        },
+    })
+}
+
+export const addOwner  = owner => ({
+    type: ActionTypes.ADD_OWNER,
+    payload: owner
+});
+

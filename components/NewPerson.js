@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
 import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker, Card } from 'react-native';
-import { postHouse } from '../redux/ActionCreators';
 import { baseUrl } from '../shared/baseUrl';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { SafeAreaView } from 'react-navigation';
 import { color } from 'react-native-reanimated';
-import { fetchHouses } from '../redux/ActionCreators';
+import { fetchOwners } from '../redux/ActionCreators';
+import { fetchTenants } from '../redux/ActionCreators';
+import { postTenant } from '../redux/ActionCreators';
+import { postOwner } from '../redux/ActionCreators';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as MediaLibrary from 'expo-media-library';
 
@@ -21,8 +23,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    fetchHouses,
-    postHouse: (address, dln, phonenumber, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => (postHouse(address, dln, phonenumber, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes)),
+    fetchOwners,
+    fetchTenants,
+    postTenant: (fullname, imageUrl, dln, phonenumber, email, role ) => (postTenant(fullname, imageUrl, dln, phonenumber, email, role)),
+    postOwner: (fullname, imageUrl, dln, phonenumber, email, role ) => (postOwner(fullname, imageUrl, dln, phonenumber, email, role))
 }
 
 class NewPerson extends Component {
@@ -33,12 +37,12 @@ class NewPerson extends Component {
 
         this.state = {
 
-            id: 0,
             fullname: '',
+            imageUrl: '',
             dln: '',
             phonenumber: '',
             email: '',
-            role: ''
+            role: 'Tenant'
 
         }
     }
@@ -48,42 +52,25 @@ class NewPerson extends Component {
     };
 
 
-    toggleRoomsModal() {
-        this.setState({showRoomsModal: !this.state.showRoomsModal});
-    }
-
-    toggleApplianceModal() {
-        this.setState({showApplianceModal: !this.state.showApplianceModal});
-    }
-
-    toggleUtilitiesModal() {
-        this.setState({showUtilitiesModal: !this.state.showUtilitiesModal});
-    }
-
-    toggleMiscellaneousModal() {
-        this.setState({showMiscellaneousModal: !this.state.showMiscellaneousModal});
-    }
     
-    toggleConfirmationModal() {
-        this.setState({showConfirmationModal: !this.state.showConfirmationModal});
-    } 
-
-    refreshHouses() {
-        this.props.fetchHouses();
-    }
-    
-    handleNewHouse() {
-        this.props.postHouse(this.state.address, this.state.dln, this.state.phonenumber, this.state.imageUrl, this.state.sqft, this.state.hoa, this.state.electricprovider, this.state.waterprovider, this.state.fuelprovider, this.state.bedrooms, this.state.bathrooms, this.state.halfbathroom, this.state.waterheater, this.state.airconditioner, this.state.furnace, this.state.washer, this.state.dryer, this.state.dishwasher, this.state.stove, this.state.rangehood, this.state.microwaverangehood, this.state.refrigerator, this.state.garagedooropener, this.state.sewertype, this.state.petfriendly, this.state.pool, this.state.notes);
+    handleNewTenant() {
+        this.props.postTenant(this.state.fullname, this.state.imageUrl, this.state.dln, this.state.phonenumber, this.state.email, this.state.role);
+        console.log(this.state.fullname, this.state.imageUrl, this.state.dln, this.state.phonenumber, this.state.email, this.state.role)
     }   
+
+    handleNewOwner() {
+        this.props.postOwner(this.state.fullname, this.state.imageUrl, this.state.dln, this.state.phonenumber, this.state.email, this.state.role);
+        console.log(this.state.fullname, this.state.imageUrl, this.state.dln, this.state.phonenumber, this.state.email, this.state.role)
+    } 
     
     resetForm() {
         this.setState({
-            id: 0,
             fullname: '',
+            imageUrl: '',
             dln: '',
             phonenumber: '',
             email: '',
-            role: ''
+            role: 'Tenant'
         });
     }
 
@@ -131,11 +118,9 @@ class NewPerson extends Component {
     }    
 
     render() {
-   
-        const id = this.props.houses.houses.length;
 
         return(
-            <ScrollView>
+            <View>
                 <View style={styles.container}>
                     <View style={styles.imageContainer}>
                         <Image 
@@ -155,8 +140,8 @@ class NewPerson extends Component {
                     <Input
                         placeholder='Full Name'
                         leftIcon={{type: 'font-awesome', name: 'user'}}
-                        onChangeText={address => this.setState({address})}
-                        value={this.state.address}
+                        onChangeText={fullname => this.setState({fullname})}
+                        value={this.state.fullname}
                         containerStyle={styles.formInput}
                         leftIconContainerStyle={styles.formIcon}
                     />       
@@ -175,25 +160,47 @@ class NewPerson extends Component {
                         value={this.state.phonenumber}
                         containerStyle={styles.formInput}
                         leftIconContainerStyle={styles.formIcon}
-                    />                                                                                            
-                                                                                
+                    />  
+                    <Input
+                        placeholder='E-mail'
+                        leftIcon={{type: 'font-awesome', name: 'envelope-o'}}
+                        onChangeText={email => this.setState({email})}
+                        value={this.state.email}
+                        containerStyle={styles.formInput}
+                        leftIconContainerStyle={styles.formIcon}
+                    />  
+                    <Text style={styles.modalText}>Role of this person:</Text>
+                    <Picker
+                        selectedValue={this.state.role}
+                        onValueChange={itemValue => this.setState({role: itemValue})}
+                    >
+                        <Picker.Item label='Tenant' value='Tenant' />
+                        <Picker.Item label='Owner' value='Owner' />
+                    </Picker>                                                                                                               
+                                                                            
     
                     <View style={{margin: 10}} >
                         <Button 
-                            title='Create Property!'
-                            onPress={() => {this.toggleConfirmationModal()}}
-                            buttonStyle={styles.Buttons}
+                            title='Create Person!'
+                            onPress={() => {
+                                if (this.state.role === 'Tenant')
+                                    this.handleNewTenant()
+                                //if (this.state.role === 'Owner')
+                                else     this.handleNewOwner()
+                                //   console.log(JSON.stringify(this.state))
+                                this.resetForm();
+                            }}
+                            
+                                buttonStyle={styles.Buttons}
                         /> 
                     </View>     
-                      <View>
-                    
-                        </View>           
+   
                 </View>
 
 
 
 
-            </ScrollView>
+            </View>
         )
     }
 
