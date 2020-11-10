@@ -356,7 +356,7 @@ class NewProperty extends Component {
                     <SafeAreaView>
                         <ScrollView>
                             <View style={styles.modal}>
-                                <Text style={styles.modalTitle}>Appliances Included</Text>                                             
+                                <Text style={styles.modalTitle}>Included Appliances</Text>                                             
                             
                                 <CheckBox 
                                     title='Water Heater'
