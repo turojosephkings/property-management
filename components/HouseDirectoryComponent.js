@@ -105,7 +105,7 @@ class HouseDirectory extends Component {
                         ListHeaderComponent={this.renderHeader}    
                         data={this.state.data}
                         renderItem={renderHouseDirectoryItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.id.toString()}
  
                     />
                 </View>

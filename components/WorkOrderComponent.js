@@ -56,11 +56,7 @@ class WorkOrder extends Component {
                         <FlatList
                             data={workorders}
                             renderItem={renderWorkorderItem}
-                            keyExtractor={item => item.id}
-                        />
-                        <Button 
-                            buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                            title='View Work Orders' 
+                            keyExtractor={item => item.id.toString()}
                         />
                     </View>
                 </Card>
@@ -73,7 +69,7 @@ class WorkOrder extends Component {
                 <RenderWorkorders workorders={workorders} />
                 <View>
                 <Button
-                    title="New Order"
+                    title="Create New Order"
                     onPress={() => navigate('NewOrder')}
                 />
                 </View>

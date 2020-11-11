@@ -287,18 +287,6 @@ const MainNavigator = createBottomTabNavigator(
                 )
             } 
         },
-        Login: { screen: LoginNavigator,
-            navigationOptions: {
-                tabBarIcon: ({tintColor}) => (
-                    <Icon
-                    name='sign-in'
-                    type='font-awesome'
-                        size={24}
-                        color={tintColor}
-                    />
-                )
-            }
-        },
         Maintenance: { screen: WorkOrderNavigator, 
             navigationOptions: {
                 tabBarIcon: ({tintColor}) => (
@@ -310,8 +298,19 @@ const MainNavigator = createBottomTabNavigator(
                     />
                 )
             } 
+        },
+        Login: { screen: LoginNavigator,
+            navigationOptions: {
+                tabBarIcon: ({tintColor}) => (
+                    <Icon
+                    name='sign-in'
+                    type='font-awesome'
+                        size={24}
+                        color={tintColor}
+                    />
+                )
+            }
         }
-        
     }
 )
 

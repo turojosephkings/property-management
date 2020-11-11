@@ -17,10 +17,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.guychairwheels.propertymanagement",
+      "buildNumber": "1.0.1"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.guychairwheels.propertymanagement",
+      "versionCode": 2
     }
   }
 }

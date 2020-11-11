@@ -174,7 +174,7 @@ class NewOrder extends Component {
                         ListHeaderComponent={renderHeader}    
                         data={this.state.data}
                         renderItem={renderHouseItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.id.toString()}
                     />
                     </SafeAreaView>
                 </Card>

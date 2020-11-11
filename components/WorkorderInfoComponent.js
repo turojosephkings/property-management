@@ -97,11 +97,10 @@ class WorkorderInfo extends Component {
             <ScrollView>
                 <View>
                     <Text>Maintenance Order Details</Text>
-                    <Text>{`Location: ${workorder.location}`}</Text>
-                    <Text>{`Description: ${workorder.description}`}</Text>
+                    <Text>Location: {workorder.location}</Text>
+                    <Text>Description: {workorder.description}</Text>
 
-                    <Text>{`Date Reported: ${workorder.dateReported}`}</Text>
-                    <Text>{`Date Completed: ${ workorder.dateCompleted ? '': 'Not Completed'}`}</Text>
+                    <Text>Date Reported: {workorder.dateReported}</Text>
                 </View>
                 <View>
                     <Text>Actions: </Text>

@@ -55,7 +55,7 @@ function RenderWorkorders({workorders}) {
                 return (
                     <ListItem                                        
                         title={item.description} 
-                        subtitle={item.dateReported, item.description} 
+                        subtitle={item.description + ' - ' + item.location} 
                          //onPress={() => console.log (item.id)} 
                         //chevron    
                     />
@@ -70,7 +70,7 @@ function RenderWorkorders({workorders}) {
             <FlatList
                 data={workorders}
                 renderItem={renderWorkorderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
             />
         </Card>
     )
@@ -124,10 +124,7 @@ class HouseInfo extends Component {
                 /> 
                 
 
-                <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='Payment Overview' 
-                />
+
 
                 
                 <Button 
@@ -139,11 +136,7 @@ class HouseInfo extends Component {
 
                 <RenderWorkorders workorders={workorders} />
 
-                <Button 
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
-                    title='View Work Orders' 
-                    onPress={() => navigate('WorkorderInfo', { houseId })}
-                />
+
 
                 <Modal
                     animationType={'slide'}
@@ -209,17 +202,17 @@ class HouseInfo extends Component {
                             <View style={styles.modal}>
                                 <Text style={styles.modalTitle}>Included Appliances</Text>                                             
                                 <View style={styles.modal}>
-                                <Text style={styles.modalText}>Water Heater:{this.state.waterheater ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>A/C: {this.state.airconditioner ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>Furnace: {this.state.furnace ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>Washer: {this.state.washer ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>Dryer: {this.state.dryer ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>Dishwasher: {this.state.dishwasher ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>Stove: {this.state.stove ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>Range Hood: {this.state.rangehood ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>MicrowaveRange Hood: {this.state.microwaverangehood ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>Refrigerator: {this.state.refrigerator ? '✅' : '❌'}</Text> 
-                                <Text style={styles.modalText}>Garage Door Opener: {this.state.garagedooropener ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Water Heater:{house.appliances.waterheater ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>A/C: {house.appliances.airconditioner ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Furnace: {house.appliances.furnace ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Washer: {house.appliances.washer ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Dryer: {house.appliances.dryer ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Dishwasher: {house.appliances.dishwasher ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Stove: {house.appliances.stove ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Range Hood: {house.appliances.rangehood ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>MicrowaveRange Hood: {house.appliances.microwaverangehood ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Refrigerator: {house.appliances.refrigerator ? '✅' : '❌'}</Text> 
+                                <Text style={styles.modalText}>Garage Door Opener: {house.appliances.garagedooropener ? '✅' : '❌'}</Text> 
                             </View>
                                                                                                                                                                           
                             </View>

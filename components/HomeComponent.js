@@ -42,7 +42,7 @@ function RenderWorkorders({workorders}) {
             <FlatList
                 data={workorders}
                 renderItem={renderWorkorderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
             />
         </Card>
     )
@@ -73,7 +73,7 @@ function RenderPaymentorders({paymentorders}) {
             <FlatList
                 data={paymentorders}
                 renderItem={renderPaymentorderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
             />
         </Card>
     )
