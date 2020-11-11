@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, FlatList, Modal } from 'react-native';
-import { Card, Button, CheckBox } from 'react-native-elements';
+import { Card, Button, CheckBox, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { ScrollView } from 'react-native-gesture-handler';
+import { fetchWorkorders } from '../redux/ActionCreators';
 import { SafeAreaView } from 'react-navigation';
 
 const mapStateToProps = state => {
@@ -12,6 +13,10 @@ const mapStateToProps = state => {
         workorders: state.workorders
     };
 };
+
+const mapDispatchToProps = {
+    fetchWorkorders  
+}
 
 function RenderHouse(props) {
 
@@ -35,7 +40,10 @@ function RenderHouse(props) {
     return <View />;
 }
 
+
+
 function RenderWorkorders({workorders}) {
+
 
     const renderWorkorderItem = ({item}) => {
 
@@ -45,9 +53,12 @@ function RenderWorkorders({workorders}) {
             wko = [...wko, {item}]
             if (wko.length !== 0) {
                 return (
-                    <View style={{margin: 10}}>                                           
-                        <Text style={{fontSize: 14}}>{item.description}</Text>        
-                    </View>
+                    <ListItem                                        
+                        title={item.description} 
+                        subtitle={item.dateReported, item.description} 
+                         //onPress={() => console.log (item.id)} 
+                        //chevron    
+                    />
                 )
             } 
         }
@@ -81,6 +92,7 @@ class HouseInfo extends Component {
         this.state = {
             showApplianceModal: false,
             showHouseDetailsModal: false,
+            activeworkorders: []
         }
     }
 
@@ -93,6 +105,10 @@ class HouseInfo extends Component {
     }
     
     render() {
+
+        const { navigate } = this.props.navigation;
+
+
         const houseId = this.props.navigation.getParam('houseId');
         const house = this.props.houses.houses.filter(house => house.id === houseId)[0];
         const workorders = this.props.workorders.workorders.filter(workorder => workorder.houseId === houseId);
@@ -126,7 +142,7 @@ class HouseInfo extends Component {
                 <Button 
                     buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}} 
                     title='View Work Orders' 
-                    //onPress={() => navigate('WorkOrder', { houseId: item.id })}
+                    onPress={() => navigate('WorkorderInfo', { houseId })}
                 />
 
                 <Modal
@@ -230,4 +246,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps)(HouseInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(HouseInfo);

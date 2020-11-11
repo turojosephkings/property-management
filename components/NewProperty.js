@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
-import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker, Card } from 'react-native';
+import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker, Card, Alert } from 'react-native';
 import { postHouse } from '../redux/ActionCreators';
 import { baseUrl } from '../shared/baseUrl';
 import * as ImagePicker from 'expo-image-picker';
@@ -610,7 +610,19 @@ class NewProperty extends Component {
                                 <Button 
                                     title='Confirm'
                                     buttonStyle={{margin: 10}}
-                                    onPress={() => {this.handleNewHouse(), this.toggleConfirmationModal(), this.resetForm(), this.refreshHouses(), console.log(JSON.stringify(this.state))}}
+                                    onPress={ () => {
+                                        Alert.alert(
+                                            `New Property ${this.state.address} Created!` ,
+                                            `Now you can use this Property in your App`,
+                                            [
+                                                {
+                                                    text: 'Ok',
+                                                    onPress: () => {this.handleNewHouse(), this.toggleConfirmationModal(), this.resetForm(), this.refreshHouses(), console.log(JSON.stringify(this.state))},
+                                                },
+                                            ],
+                                            { cancelable: false}
+                                        )
+                                    }}
                                 />
                             </View>  
                         </ScrollView>                        

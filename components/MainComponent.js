@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Home from './HomeComponent';
 import HouseDirectory from './HouseDirectoryComponent';
 import HouseInfo from './HouseInfoComponent';
+import WorkorderInfo from './WorkorderInfoComponent';
 import WorkOrder from "./WorkOrderComponent";
 import NewOrder from './NewOrderComponent';
 import Login from './LoginComponent';
@@ -17,6 +18,7 @@ import NewProperty from './NewProperty';
 import NewOrderComponent from './NewOrderComponent';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import NewPerson from './NewPerson';
+import WorkorderInfoComponent from './WorkorderInfoComponent';
 
 const mapDispatchToProps = {
     fetchHouses,
@@ -38,7 +40,8 @@ const HouseDirectoryNavigator = createStackNavigator(
             }) 
         }, 
         HouseInfo: 
-        { screen: HouseInfo }
+        { screen: HouseInfo },
+        WorkorderInfo: { screen: WorkorderInfo }
     },
     {
         initialRouteName: 'HouseDirectory',
@@ -65,6 +68,15 @@ const WorkOrderNavigator = createStackNavigator(
                                 iconStyle={styles.stackIcon}
                             />
             }) 
+        },
+        WorkorderInfo: { screen: WorkorderInfo,
+            navigationOptions: ({navigation}) => ({
+                headerLeft: <Icon
+                            name='file-text-o'
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                        />
+            })
         },
         NewOrder: { screen: NewOrder,
             navigationOptions: ({navigation}) => ({
@@ -287,11 +299,11 @@ const MainNavigator = createBottomTabNavigator(
                 )
             }
         },
-        WorkOrder: { screen: WorkOrderNavigator, 
+        Maintenance: { screen: WorkOrderNavigator, 
             navigationOptions: {
                 tabBarIcon: ({tintColor}) => (
                     <Icon
-                    name='building-o'
+                    name='wrench'
                     type='font-awesome'
                         size={24}
                         color={tintColor}

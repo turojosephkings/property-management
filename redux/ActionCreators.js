@@ -2,6 +2,7 @@ import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 import { tenants } from './tenants';
 import { owners } from './owners';
+import { workorders } from './workorders';
 
 export const postHouse = (address, owner, tenant, imageUrl, sqft, hoa, electricprovider, waterprovider, fuelprovider, bedrooms, bathrooms, halfbathroom, waterheater, airconditioner, furnace, washer, dryer, dishwasher, stove, rangehood, microwaverangehood, refrigerator, garagedooropener, sewertype, petfriendly, pool, notes) => dispatch =>  {
 
@@ -128,6 +129,39 @@ export const workordersFailed = errMess => ({
 export const addWorkorders = workorders => ({
     type: ActionTypes.ADD_WORKORDERS,
     payload: workorders
+});
+
+
+export const postWorkorder = (houseId, address, dateReported, dateAssigned, dateCompleted, completed, location, description, provider ) => dispatch =>  {
+
+    const newWorkorder = {
+        houseId, 
+        address, 
+        dateReported, 
+        dateAssigned, 
+        dateCompleted, 
+        completed, 
+        location, 
+        description, 
+        provider 
+    };
+
+    setTimeout(() => {
+        dispatch(addWorkorder(newWorkorder));
+    }, 2000);
+
+    fetch(baseUrl + "workorders", {
+        method: "POST",
+        body: JSON.stringify(newWorkorder),
+        headers: {
+            "Content-Type" : "application/json",
+        },
+    })
+}
+
+export const addWorkorder  = workorder => ({
+    type: ActionTypes.ADD_WORKORDER,
+    payload: workorder
 });
 
 

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, Picker, Switch, Button, StyleSheet, FlatList } from 'react-native';
-import { Card, Icon, Rating, Input, ListItem, Tile } from 'react-native-elements';
+import { Text, View, ScrollView, Picker, Switch, StyleSheet, FlatList, Modal } from 'react-native';
+import { Card, Icon, Rating, Input, ListItem, Tile, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import HouseDirectory from './HouseDirectoryComponent';
+import { SafeAreaView } from 'react-navigation';
+import { fetchWorkorders } from '../redux/ActionCreators';
+import { postWorkorder } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
     return {
@@ -13,7 +16,11 @@ const mapStateToProps = state => {
     };
 };
 
-
+const mapDispatchToProps = {
+    fetchWorkorders,
+    postWorkorder: ( houseId, address, dateReported, dateAssigned, dateCompleted, completed, location, description, provider ) => (postWorkorder( houseId, address, dateReported, dateAssigned, dateCompleted, completed, location, description, provider ))
+    
+}
 
 
 
@@ -30,44 +37,67 @@ class NewOrder extends Component {
         super(props)
 
         this.state = {
+            data: this.props.houses.houses,
+            fullData: this.props.houses.houses,
+            query: '',
+            showSelectPropertyModal: false,
+            showConfirmationModal: false,
             orderType: "Maintenance Order",
             houseId: '',
             address: '',
             dateReported: new Date(),
-            dateCompleted: new Date(),
+            dateAssigned: '',
+            dateCompleted: '',
             completed: false,
+            location: '',
             description: '',
-            showmodal: false
+            provider: '',
         };
     }
 
     handleNewOrder() {
-        console.log(JSON.stringify(this.state));
-       // this.toggleModal();
+        this.props.postWorkorder( this.state.houseId, this.state.address, this.state.dateReported, this.state.dateAssigned, this.state.dateCompleted, this.state.completed, this.state.location, this.state.description, this.state.provider)
     }
 
     resetForm() {
         this.setState({
+            data: this.props.houses.houses,
+            fullData: this.props.houses.houses,
+            query: '',
+            showConfirmationModal: false,
+            showSelectPropertyModal: false,
             orderType: "Maintenance Order",
             houseId: '',
             address: '',
             dateReported: new Date(),
-            dateCompleted: new Date(),
+            dateAssigned: '',
+            dateCompleted: '',
             completed: false,
+            location: '',
             description: '',
-            showmodal: false
+            provider: '',
         });
     }
 
-    toggleModal() {
-        this.setState({showModal: !this.setState.showModal});
+    toggleSelectPropertyModal() {
+        this.setState({showSelectPropertyModal: !this.state.showSelectPropertyModal});
     }
 
-    chooseHouse(id, address) {
+    toggleConfirmationModal() {
+        this.setState({showConfirmationModal: !this.state.showConfirmationModal});
+    }
+    
+    refreshWorkorders() {
+        this.props.fetchWorkorders();
+    }
+
+
+    chooseHouse(houseId, address) {
         this.setState({
-            id,
+            houseId,
             address
         })
+       // console.log(JSON.stringify(this.state))
     }
 
  
@@ -79,22 +109,59 @@ class NewOrder extends Component {
 
         const RenderHouses = ({houses}) => {
 
-    
+            
+
+
+            const renderHeader = () => {    
+                return (      
+                  <Input  
+                    autoCapitalize='none'
+                    autoCorrect={false}      
+                    placeholder="Search Address Here..."                 
+                    onChangeText={text => searchFilterFunction(text)}
+                    autoCorrect={false} 
+                    inputStyle={{        borderRadius: 25,
+                        borderColor: '#333',
+                        backgroundColor: '#fff'}}       
+                  />    
+                );  
+            };
+        
+            const searchFilterFunction = text => {    
+                const formattedQuery = text.toLowerCase();
+        
+                
+                const data = this.state.fullData.filter(address => { 
+                    return contains(address, formattedQuery)
+                })
+        
+                this.setState({ data, query: text }); 
+            }
+        
+            const contains = ({ address }, query) => {
+        
+                if (address.toLowerCase().includes(query)) {
+                  return true
+                }
+                return false
+            }
+
+
+
+
             const renderHouseItem = ({item}) => {
         
                 return (
+                    <View>
                     <ListItem
                         leftAvatar={{ source: {uri: baseUrl + item.image}}}
                         title={item.address}
                         subtitle={item.owner}
                         featured  
-                        onPress={ ()=> //this.setState({address: item.address}),
-                            //this.props.chooseHouse(item.id, item.address),
-                            //this.props.chooseHouse(item.id, item.address)
-                            console.log(item.id)//, console.log(this.state.setState({houseId: 1})) //, 
-                            //console.log(JSON.stringify(this.state))
-                        }
+                        onPress={ ()=> {this.chooseHouse(item.id, item.address), this.toggleSelectPropertyModal()  
+                        }}
                     />
+                    </View>
                 );
             }
         
@@ -102,12 +169,14 @@ class NewOrder extends Component {
             
             return (
                 <Card title='Select Property'>
-        
+                <SafeAreaView style={{flex: 1}}>
                     <FlatList
-                        data={houses}
+                        ListHeaderComponent={renderHeader}    
+                        data={this.state.data}
                         renderItem={renderHouseItem}
                         keyExtractor={item => item.id}
                     />
+                    </SafeAreaView>
                 </Card>
             )
         }
@@ -117,9 +186,24 @@ class NewOrder extends Component {
         return (
             <ScrollView>
                 <View>
-                    <RenderHouses houses={houses}/>
+
+                    <View style={{margin: 10}}>
+                        <Button 
+                            title='Select Property'
+                            onPress={() => {this.toggleSelectPropertyModal()}}
+                        />
+                    </View>    
                 </View>
+                <Text>Address: {this.state.address}</Text>
                 <View>
+                <Input
+                        placeholder='Location'
+                        leftIcon={{type: 'font-awesome', name: 'map-marker'}}
+                        onChangeText={location => this.setState({location})}
+                        value={this.state.location}
+                        containerStyle={styles.formInput}
+                        leftIconContainerStyle={styles.formIcon}
+                    />                    
                     <Input
                         placeholder='Description'
                         leftIcon={{type: 'font-awesome', name: 'commenting'}}
@@ -128,7 +212,81 @@ class NewOrder extends Component {
                         containerStyle={styles.formInput}
                         leftIconContainerStyle={styles.formIcon}
                     />
+                    <Input
+                        placeholder='Provider'
+                        leftIcon={{type: 'font-awesome', name: 'briefcase'}}
+                        onChangeText={provider => this.setState({provider})}
+                        value={this.state.provider}
+                        containerStyle={styles.formInput}
+                        leftIconContainerStyle={styles.formIcon}
+                    />
+                    <View style={styles.modal}>
+                        <Button 
+                            title='Confirm'
+                            onPress={() => { this.toggleConfirmationModal(), this.refreshWorkorders(), this.handleNewOrder()}}
+                        />
+                    </View>                    
                 </View>
+                
+                <Modal
+                    animationType={'slide'}
+                    transparent={false}
+                    visible={this.state.showSelectPropertyModal}
+                    onRequestClose={() => this.toggleSelectPropertyModal()}
+                >
+                    <SafeAreaView>
+                        <ScrollView>
+                            <View style={{ height: 500}}>
+                                <ScrollView>
+                                <RenderHouses houses={houses}/>                                      
+                                </ScrollView>
+                            </View>
+                                                                                                                                                                
+                    
+                            <View style={styles.modal}>
+                                <Button 
+                                    title='Confirm'
+                                    onPress={() => this.toggleSelectPropertyModal() }
+                                />
+                            </View>
+
+
+
+                        </ScrollView>
+                    </SafeAreaView>
+                </Modal>
+
+                <Modal
+                    animationType={'slide'}
+                    transparent={false}
+                    visible={this.state.showConfirmationModal}
+                    onRequestClose={() => this.toggleConfirmationModal()}
+                >
+                    <SafeAreaView>
+                        <ScrollView>
+                        <View style={styles.modal}>
+                            <Text style={styles.modalText}>Service Address:  {this.state.address}</Text>
+                            <Text style={styles.modalText}>Date Reported:  {this.state.dateReported.toLocaleDateString('en-US')}</Text>                                                            
+                            <Text style={styles.modalText}>Location: {this.state.location}</Text>   
+                            <Text style={styles.modalText}>Description: {this.state.description}</Text>
+                            <Text style={styles.modalText}>Provider: {this.state.provider}</Text>                                
+                        </View>
+                        <View style={styles.modal}>
+                            <Button 
+                                title='Dismiss'
+                                buttonStyle={{backgroundColor: 'red', margin: 10}}
+                            onPress={() => this.resetForm()}
+                            />
+                            <Button 
+                                title='Confirm'
+                                buttonStyle={{margin: 10}}
+                                onPress={() => {this.toggleConfirmationModal(), this.resetForm()}}
+
+                            />
+                        </View>
+                        </ScrollView>
+                    </SafeAreaView>
+                </Modal>
 
             </ScrollView>
         )
@@ -159,4 +317,4 @@ const styles = StyleSheet.create({
 
 
 
-export default connect(mapStateToProps)(NewOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(NewOrder);

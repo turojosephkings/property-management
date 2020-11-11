@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
-import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker, Card } from 'react-native';
+import { Modal, Text, View, StyleSheet, ScrollView, Image, Picker, Card, Alert } from 'react-native';
 import { baseUrl } from '../shared/baseUrl';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -55,12 +55,10 @@ class NewPerson extends Component {
     
     handleNewTenant() {
         this.props.postTenant(this.state.fullname, this.state.imageUrl, this.state.dln, this.state.phonenumber, this.state.email, this.state.role);
-        console.log(this.state.fullname, this.state.imageUrl, this.state.dln, this.state.phonenumber, this.state.email, this.state.role)
     }   
 
     handleNewOwner() {
         this.props.postOwner(this.state.fullname, this.state.imageUrl, this.state.dln, this.state.phonenumber, this.state.email, this.state.role);
-        console.log(this.state.fullname, this.state.imageUrl, this.state.dln, this.state.phonenumber, this.state.email, this.state.role)
     } 
     
     resetForm() {
@@ -246,11 +244,22 @@ class NewPerson extends Component {
                                     buttonStyle={{margin: 10}}
                                     onPress={() => {
                                         if (this.state.role === 'Tenant'){
-                                            this.handleNewTenant(), this.resetForm(), this.refreshTenants(), this.toggleConfirmationModal()
+                                            this.handleNewTenant()
                                         }
                                         else {
-                                            this.handleNewOwner(), this.resetForm(), this.refreshTenants(), this.toggleConfirmationModal()
+                                            this.handleNewOwner()
                                         }
+                                        Alert.alert(
+                                            `New ${this.state.role} Created!` ,
+                                            `Now you can use this ${this.state.role} in your App`,
+                                            [
+                                                {
+                                                    text: 'Ok',
+                                                    onPress: () => {this.toggleConfirmationModal(), this.refreshTenants() , this.refreshTenants(),  this.resetForm()},
+                                                },
+                                            ],
+                                            { cancelable: false}
+                                        )
                                     }}
                                 />
                             </View>  
